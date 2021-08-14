@@ -1,1 +1,1 @@
-
+- NASA Fire Detection (FIRMS9 https://earthdata.nasa.gov/faq/firms-faq#ed-active-fire-burnedarea
