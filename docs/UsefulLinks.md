@@ -1,0 +1,3 @@
+- [Project description (PDF)](https://drive.google.com/drive/folders/1QU_jmMls4PJGmq_MXlWcpXG1eegZcQFq)
+- [Task List (Excel)](https://docs.google.com/spreadsheets/d/1DAGYFzHuDYPC8SCm1cZ9k02bU9v9xBWBVbMWP-U5Sxo/edit?usp=sharing)
+- [NASA Fire Detection (FIRMS9)](https://earthdata.nasa.gov/faq/firms-faq#ed-active-fire-burnedarea)
