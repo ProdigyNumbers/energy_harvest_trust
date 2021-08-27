@@ -1,0 +1,5 @@
+.vscode/*
+
+src/generated/swagger_client.egg-info
+
+*.pyc
