@@ -1,10 +1,14 @@
-import os
-
-print(os.getcwd())
-
-
-from swagger_client.api.categories_api import CategoriesApi
+import swagger_client
+from swagger_client.api.default_api import DefaultApi
+from swagger_client.rest import ApiException
 
 
-api = CategoriesApi()
-api.get_category_by_id(1)
+def main():
+    api = DefaultApi()
+    wildfire_response = api.categories_category_id_get("wildfires")
+
+    print(wildfire_response)
+
+
+if __name__ == "__main__":
+    main()

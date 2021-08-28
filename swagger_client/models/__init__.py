@@ -15,3 +15,4 @@ from __future__ import absolute_import
 
 # import models into model package
 from swagger_client.models.category import Category
+from swagger_client.models.category_response import CategoryResponse
