@@ -29,3 +29,8 @@ Does NASA fire detection API gets something during the month of October?
 
 ![22](data/planetData/fireOct2020.png "Fire")
 
+It detect a fire for the 9 of October, close to our location, but not quite there.
+
+
+![22](data/planetData/fire9Oct.png "Fire")
+
