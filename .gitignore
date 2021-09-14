@@ -3,6 +3,7 @@
 src/generated/swagger_client.egg-info
 
 *.pyc
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -100,9 +101,6 @@ ipython_config.py
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 
-# vscode
-.vscode/
-
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
@@ -140,3 +138,4 @@ dmypy.json
 # My files
 .DS_Store
 .idea
+
