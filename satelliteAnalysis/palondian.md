@@ -1,3 +1,5 @@
+Palondian
+![6](../data/planetData/palondianFire/palondianArea.png "18")
 18-10-2020
 ![6](../data/planetData/palondianFire/18oct.png "18")
 19-10-2020
