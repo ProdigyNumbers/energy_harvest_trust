@@ -10,6 +10,12 @@ python-dateutil = "*"
 urllib3 = "*"
 py = "*"
 randomize = "*"
+geopandas = "*"
+earthengine-api = "*"
+matplotlib = "*"
+folium = "*"
+geemap = "*"
+python-dotenv = "*"
 
 [dev-packages]
 black = "*"
