@@ -1,3 +1,8 @@
 - [Project description (PDF)](https://drive.google.com/drive/folders/1QU_jmMls4PJGmq_MXlWcpXG1eegZcQFq)
 - [Task List (Excel)](https://docs.google.com/spreadsheets/d/1DAGYFzHuDYPC8SCm1cZ9k02bU9v9xBWBVbMWP-U5Sxo/edit?usp=sharing)
 - [NASA Fire Detection (FIRMS9)](https://earthdata.nasa.gov/faq/firms-faq#ed-active-fire-burnedarea)
+- [Crop identification using satellite imagery: Introduction](https://write.agrevolution.in/crop-identification-using-satellite-imagery-introduction-83d79344f9ee)
+- [ICLR workshop challenge: crop detection using satellite imagery](https://zindi.africa/competitions/iclr-workshop-challenge-2-radiant-earth-computer-vision-for-crop-recognition)
+- [Object-Based Greenhouse Horticultural Crop Identification from Multi-Temporal Satellite Imagery: A Case Study in Almeria, Spain](https://www.mdpi.com/2072-4292/7/6/7378)
+- [Nature:High resolution paddy rice maps in cloud-prone Bangladesh and Northeast India using Sentinel-1 data](https://www.nature.com/articles/s41597-019-0036-3)
+- [Crop classification from Sentinel-2-derived vegetation indices using ensemble learning](https://www.spiedigitallibrary.org/journals/journal-of-applied-remote-sensing/volume-12/issue-02/026019/Crop-classification-from-Sentinel-2-derived-vegetation-indices-using-ensemble/10.1117/1.JRS.12.026019.full?SSO=1)
