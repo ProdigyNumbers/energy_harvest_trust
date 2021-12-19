@@ -25,3 +25,8 @@ and gives the plan for implementing the various work packages using Google Earth
 ## Data:
 
 ### Sentinel-1 SAR data and pre-processing
+
+- Sentinel-1 data is collected with several different instrument configurations, resolutions, band combinations during both ascending and descending orbits. Because of this heterogeneity, it's usually necessary to filter the data down to a homogenous subset before starting processing
+- Filter the Sentinel-1 Image collection w.r.t. start and end date and the bounding box of the shape of Punjab.
+- The SAR imagery is used and only the Interferometric Wide Swath (IW) mode is used since this mode avoids conflicts and preserves revisit performance, provide consistent long-term archives and designed to acquire imagery of land surfaces.
+- The SAR imagery of IW mode is provided in dual-polarization with vertical transmit, vertical receive (VV) and vertical transmit, horizontal receive (VH)
