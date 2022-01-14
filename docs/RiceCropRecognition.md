@@ -30,3 +30,6 @@ and gives the plan for implementing the various work packages using Google Earth
 - Filter the Sentinel-1 Image collection w.r.t. start and end date and the bounding box of the shape of Punjab.
 - The SAR imagery is used and only the Interferometric Wide Swath (IW) mode is used since this mode avoids conflicts and preserves revisit performance, provide consistent long-term archives and designed to acquire imagery of land surfaces.
 - The SAR imagery of IW mode is provided in dual-polarization with vertical transmit, vertical receive (VV) and vertical transmit, horizontal receive (VH)
+- **Backscatter** is the portion of the outgoing radar signal that the target redirects directly back towards the radar antenna. Backscattering is the process by which backscatter is formed. The usual notation is the symbol $\sigma$. It is also the measure of the reflective strength of a radar target. 
+- **Band** is a selection of wavelengths or range of radar frequencies. E.g., Sentinel-1 operates at C-band
+- **C-Band**
