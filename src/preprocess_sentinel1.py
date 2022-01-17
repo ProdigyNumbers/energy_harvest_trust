@@ -9,7 +9,7 @@
             In our case the default will be 'VH' since that is what is required by this paper :
             (https://www.nature.com/articles/s41597-019-0036-3)
         orbit: Orbits to include (BOTH, ASCENDING or DESCENDING)
-        geometry: The polygon of the region we will be looking at
+        state_name: State name to get the geometry from the country shapefile
         border_noise_correction: true or false options to apply additional Border noise correction (Optional)
         speckle_filtering: true or false options to apply speckle filtering (optional)
         speckle_filter:
@@ -27,6 +27,8 @@ import ee
 import json
 from types import SimpleNamespace
 import logging
+import geopandas as gpd
+import extract_gadm_data as egd
 
 
 def preprocess_sentinel1(parameters: SimpleNamespace):
@@ -36,7 +38,8 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     end_date = ee.Date(parameters.end_date)
     polarization = parameters.polarization
     orbit = parameters.orbit
-    geometry = ee.Geometry.Polygon(parameters.geometry)
+    state_name = parameters.state_name
+    country_shapefile = parameters.country_shapefile
     # border_noise_correction = parameters.border_noise_correction
     # speckle_filtering = parameters.speckle_filtering
     # speckle_filter = parameters.speckle_filter
@@ -52,6 +55,31 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     #     format = 'DB'
     if orbit is None:
         orbit = "BOTH"
+
+    if state_name is None:
+        raise ValueError("State name is required")
+
+    if country_shapefile is None:
+        raise ValueError(
+            "country_shapefile path is not defined, please provide a valid path in input json file"
+        )
+
+    # extract the geometry of the state
+    country_gpd = gpd.read_file(country_shapefile)
+    state_gdf = egd.extract_state_dataframe(country_gpd, state_name=state_name)
+    state_extents = egd.region_extents(state_gdf)
+    state_bbox = egd.get_region_bounding_box(state_extents)
+    state_polygon = ee.Geometry.Polygon(
+        [
+            [
+                list(state_bbox[0]),
+                list(state_bbox[1]),
+                list(state_bbox[2]),
+                list(state_bbox[3]),
+                list(state_bbox[0]),
+            ]
+        ]
+    )
 
     polarization_band = ["VV", "VH", "VVVH"]
     if polarization not in polarization_band:
@@ -83,7 +111,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
         .filter(ee.Filter.eq("resolution_meters", 10))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))
         .filterDate(start_date, end_date)
-        .filterBounds(geometry)
+        .filterBounds(state_polygon)
     )
 
     # select orbit
@@ -103,7 +131,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     )
 
     if clip_to_region:
-        sentinel1 = sentinel1.map(lambda image: image.clip(geometry))
+        sentinel1 = sentinel1.map(lambda image: image.clip(state_polygon))
 
     if save_to_drive:
         size = sentinel1.size().getInfo()
