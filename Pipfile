@@ -17,6 +17,7 @@ folium = "*"
 geemap = "*"
 python-dotenv = "*"
 ipython = "*"
+argparse = "*"
 
 [dev-packages]
 black = "*"
@@ -24,6 +25,7 @@ coverage = "*"
 nose = "*"
 pluggy = "*"
 ipython = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.9"

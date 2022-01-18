@@ -3,10 +3,10 @@
     "end_date": "2020-01-31",
     "polarization": "VH",
     "orbit": "DESCENDING",
-    "geometry": [
-        {
-            "type": "Polygon",
-            "coordinates": [
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
                 [
                     76.61387367115864,
                     30.54518200591969
@@ -32,9 +32,9 @@
                     30.54518200591969
                 ]
             ]
-        }
-    ],
+        ]
+    },
     "clip_to_region": true,
     "save_to_drive": true,
-    "output_path": "./data/output/"
+    "output_path": "/media/veracrypt1/dev/dssg/energy_harvest_trust/data/output"
 }

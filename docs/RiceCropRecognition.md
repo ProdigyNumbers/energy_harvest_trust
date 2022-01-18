@@ -1,7 +1,7 @@
 # Work Packages : 
 
 This document outlines the work packages as described in the paper:
-- [High resolution paddy rice maps in cloud-prone Bangladesh and Northeast India using Sentinel-1 data](https://www.nature.com/articles/s41597-019-0036-3)
+- [High resolution paddy rice maps in cloud-prone Bangladesh and Northeast India using Sentinel-1 data]
 
 and gives the plan for implementing the various work packages using Google Earth Engine for the region of Punjab in India.
 

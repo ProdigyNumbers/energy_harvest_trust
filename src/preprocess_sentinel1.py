@@ -28,7 +28,6 @@ import json
 from types import SimpleNamespace
 import logging
 import geopandas as gpd
-import extract_gadm_data as egd
 
 
 def preprocess_sentinel1(parameters: SimpleNamespace):
@@ -38,8 +37,9 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     end_date = ee.Date(parameters.end_date)
     polarization = parameters.polarization
     orbit = parameters.orbit
-    state_name = parameters.state_name
-    country_shapefile = parameters.country_shapefile
+    print(type(parameters.geometry))
+    if parameters.geometry.type == "Polygon":
+        geometry = ee.Geometry.Polygon(parameters.geometry.coordinates)
     # border_noise_correction = parameters.border_noise_correction
     # speckle_filtering = parameters.speckle_filtering
     # speckle_filter = parameters.speckle_filter
@@ -55,31 +55,6 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     #     format = 'DB'
     if orbit is None:
         orbit = "BOTH"
-
-    if state_name is None:
-        raise ValueError("State name is required")
-
-    if country_shapefile is None:
-        raise ValueError(
-            "country_shapefile path is not defined, please provide a valid path in input json file"
-        )
-
-    # extract the geometry of the state
-    country_gpd = gpd.read_file(country_shapefile)
-    state_gdf = egd.extract_state_dataframe(country_gpd, state_name=state_name)
-    state_extents = egd.region_extents(state_gdf)
-    state_bbox = egd.get_region_bounding_box(state_extents)
-    state_polygon = ee.Geometry.Polygon(
-        [
-            [
-                list(state_bbox[0]),
-                list(state_bbox[1]),
-                list(state_bbox[2]),
-                list(state_bbox[3]),
-                list(state_bbox[0]),
-            ]
-        ]
-    )
 
     polarization_band = ["VV", "VH", "VVVH"]
     if polarization not in polarization_band:
@@ -111,7 +86,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
         .filter(ee.Filter.eq("resolution_meters", 10))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))
         .filterDate(start_date, end_date)
-        .filterBounds(state_polygon)
+        .filterBounds(geometry)
     )
 
     # select orbit
@@ -131,7 +106,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     )
 
     if clip_to_region:
-        sentinel1 = sentinel1.map(lambda image: image.clip(state_polygon))
+        sentinel1 = sentinel1.map(lambda image: image.clip(geometry))
 
     if save_to_drive:
         size = sentinel1.size().getInfo()
@@ -143,8 +118,8 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
             description = image_name
             asset_id = output_path + "/" + image_name
 
-            batch_process = ee.batch.Export.image.toAsset(
-                image=image,
+            task = ee.batch.Export.image.toAsset(
+                image=image.clip(geometry),
                 description=description,
                 assetId=asset_id,
                 region=sentinel1.geometry(),
@@ -152,14 +127,18 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
                 maxPixels=1e13,
             )
 
-            batch_process.start()
+            task.start()
             logging.info("Exporting image {} to {}".format(image_name, output_path))
     return sentinel1
 
 
 def load_data(input_parameters: str):
     ee.Initialize()
-    parameters = json.loads(
-        input_parameters, object_hook=lambda d: SimpleNamespace(**d)
-    )
-    sentinel1_data = preprocess_sentinel1(parameters)
+    # parameters = json.loads(
+    #     input_parameters, object_hook=lambda d: SimpleNamespace(**d)
+    # )
+    with open(input_parameters, "r") as f:
+        parameters = json.load(f)
+        f.seek(0)
+        parameters = json.load(f, object_hook=lambda d: SimpleNamespace(**d))
+        sentinel1_data = preprocess_sentinel1(parameters)
