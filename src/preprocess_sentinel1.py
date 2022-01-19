@@ -28,6 +28,7 @@ import json
 from types import SimpleNamespace
 import logging
 import geopandas as gpd
+import urllib
 
 
 def preprocess_sentinel1(parameters: SimpleNamespace):
@@ -37,7 +38,6 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     end_date = ee.Date(parameters.end_date)
     polarization = parameters.polarization
     orbit = parameters.orbit
-    print(type(parameters.geometry))
     if parameters.geometry.type == "Polygon":
         geometry = ee.Geometry.Polygon(parameters.geometry.coordinates)
     # border_noise_correction = parameters.border_noise_correction
@@ -117,20 +117,36 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
             image_name = str(image.id().getInfo())
             description = image_name
 
-            task = ee.batch.Export.image.toDrive(
-                image=image.clip(geometry),
-                description=description,
-                folder="Sentinel-1_SAR_Images",
-                fileNamePrefix=image_name,
-                region=sentinel1.geometry(),
-                scale=10,
-                crs="EPSG:4326",
-                maxPixels=1e13,
+            image = image.clip(geometry)
+            image_path = image.getDownloadUrl(
+                {
+                    "scale": 10,
+                    "region": sentinel1.geometry().getInfo(),
+                    "crs": "EPSG:4326",
+                    "description": description,
+                    "fileFormat": "GeoTIFF",
+                    "maxPixels": 1e13,
+                    "fileNamePrefix": image_name,
+                }
+            )
+            urllib.request.urlretrieve(
+                image_path, output_path + "/" + image_name + ".tif"
             )
 
-            task.start()
+            # task = ee.batch.Export.image.toDrive(
+            #     image=image.clip(geometry),
+            #     description=description,
+            #     folder="DSSG",
+            #     fileNamePrefix=image_name,
+            #     region=sentinel1.geometry(),
+            #     scale=10,
+            #     crs="EPSG:4326",
+            #     maxPixels=1e13,
+            # )
+
+            # task.start()
             # logging.info("Exporting image {} to {}".format(image_name, output_path))
-            logging.info("Exporting image {} to Google Drive".format(image_name))
+            logging.info("Exporting image {} to Local Drive".format(image_name))
     return sentinel1
 
 

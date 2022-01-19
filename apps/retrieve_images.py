@@ -11,7 +11,11 @@ Followed by the following steps:
 `$ python apps/retrieve_images.py ./data/input/polygon0-jan.json`
 """
 
-
+logging.basicConfig(
+    encoding="utf-8",
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 parser = argparse.ArgumentParser(description="Retrieve images given a json file")
 parser.add_argument(
     "input_parameters_file", type=str, help="File containing the input parameters"

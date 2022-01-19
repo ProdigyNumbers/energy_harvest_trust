@@ -35,5 +35,6 @@
         ]
     },
     "clip_to_region": true,
-    "save_to_drive": true
+    "save_to_drive": true,
+    "output_path": "<path_to>/energy_harvest_trust/data/output"
 }
