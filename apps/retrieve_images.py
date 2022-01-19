@@ -8,7 +8,7 @@ Command line interface for retrieving Sentinel-1 images and saving them to Googl
 Before running this script, you need to have a Google account and a Google Drive account.
 Followed by the following steps:
 `$ earthengine authenticate`
-``
+`$ python apps/retrieve_images.py ./data/input/polygon0-jan.json`
 """
 
 
