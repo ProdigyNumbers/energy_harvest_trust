@@ -35,6 +35,5 @@
         ]
     },
     "clip_to_region": true,
-    "save_to_drive": true,
-    "output_path": "/media/veracrypt1/dev/dssg/energy_harvest_trust/data/output"
+    "save_to_drive": true
 }

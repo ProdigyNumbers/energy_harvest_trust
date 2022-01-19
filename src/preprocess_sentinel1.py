@@ -116,19 +116,21 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
             image = ee.Image(image)
             image_name = str(image.id().getInfo())
             description = image_name
-            asset_id = output_path + "/" + image_name
 
-            task = ee.batch.Export.image.toAsset(
+            task = ee.batch.Export.image.toDrive(
                 image=image.clip(geometry),
                 description=description,
-                assetId=asset_id,
+                folder="Sentinel-1_SAR_Images",
+                fileNamePrefix=image_name,
                 region=sentinel1.geometry(),
                 scale=10,
+                crs="EPSG:4326",
                 maxPixels=1e13,
             )
 
             task.start()
-            logging.info("Exporting image {} to {}".format(image_name, output_path))
+            # logging.info("Exporting image {} to {}".format(image_name, output_path))
+            logging.info("Exporting image {} to Google Drive".format(image_name))
     return sentinel1
 
 
