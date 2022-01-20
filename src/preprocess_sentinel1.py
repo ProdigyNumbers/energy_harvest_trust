@@ -46,6 +46,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     # format = parameters.format
     clip_to_region = parameters.clip_to_region
     save_to_drive = parameters.save_to_drive
+    write_to_csv = parameters.write_to_csv
     output_path = parameters.output_path
 
     # check the validity of the parameters
@@ -118,6 +119,20 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
             description = image_name
 
             image = image.clip(geometry)
+            if write_to_csv:
+                # Add a layer to image with lat, lon.
+                image_lat = image.addBands(image.pixelLonLat())
+                # Extract a sample as csv
+                csv_url = image_lat.sample(
+                    region=sentinel1.geometry(),
+                    dropNulls=True,
+                    scale=10,
+                    geometries=True,
+                ).getDownloadUrl()
+                urllib.request.urlretrieve(
+                    csv_url, output_path + "/" + image_name + ".csv"
+                )
+
             image_path = image.getDownloadUrl(
                 {
                     "scale": 10,

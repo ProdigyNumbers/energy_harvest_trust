@@ -79,5 +79,6 @@
         }
     ],
     "clip_to_region": true,
-    "save_to_drive": true
+    "save_to_drive": true,
+    "output_path": "data/output"
 }
