@@ -1,6 +1,6 @@
 {
-    "start_date": "2020-01-01",
-    "end_date": "2020-01-31",
+    "start_date": "2020-06-20",
+    "end_date": "2020-09-10",
     "polarization": "VH",
     "orbit": "DESCENDING",
     "geometry": {
@@ -29,5 +29,7 @@
         ]
     },
     "clip_to_region": true,
-    "save_to_drive": true
+    "save_to_drive": true,
+    "write_to_csv": true,
+    "output_path": "data/output"
 }
