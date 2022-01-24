@@ -141,3 +141,6 @@ dmypy.json
 
 # Ignore stub files
 typings/
+
+# Ignore output directory
+data/output
