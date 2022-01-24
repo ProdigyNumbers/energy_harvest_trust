@@ -47,11 +47,15 @@ class CategoriesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_category_by_id_with_http_info(category_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.get_category_by_id_with_http_info(
+                category_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.get_category_by_id_with_http_info(category_id, **kwargs)  # noqa: E501
+            (data) = self.get_category_by_id_with_http_info(
+                category_id, **kwargs
+            )  # noqa: E501
             return data
 
     def get_category_by_id_with_http_info(self, category_id, **kwargs):  # noqa: E501
@@ -70,31 +74,32 @@ class CategoriesApi(object):
                  returns the request thread.
         """
 
-        all_params = ['category_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["category_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method get_category_by_id" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'category_id' is set
-        if ('category_id' not in params or
-                params['category_id'] is None):
-            raise ValueError("Missing the required parameter `category_id` when calling `get_category_by_id`")  # noqa: E501
+        if "category_id" not in params or params["category_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `category_id` when calling `get_category_by_id`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'category_id' in params:
-            path_params['categoryId'] = params['category_id']  # noqa: E501
+        if "category_id" in params:
+            path_params["categoryId"] = params["category_id"]  # noqa: E501
 
         query_params = []
 
@@ -105,24 +110,27 @@ class CategoriesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            '/categories/{categoryId}', 'GET',
+            "/categories/{categoryId}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='Category',  # noqa: E501
+            response_type="Category",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

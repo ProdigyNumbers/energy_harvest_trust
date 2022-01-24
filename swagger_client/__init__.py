@@ -16,16 +16,22 @@ from __future__ import absolute_import
 
 # import apis into sdk package
 from swagger_client.api.default_api import DefaultApi
+
 # import ApiClient
 from swagger_client.api_client import ApiClient
 from swagger_client.configuration import Configuration
+
 # import models into sdk package
 from swagger_client.models.category import Category
 from swagger_client.models.category_response import CategoryResponse
 from swagger_client.models.event import Event
 from swagger_client.models.geometry import Geometry
-from swagger_client.models.one_of_category_response_events_items import OneOfCategoryResponseEventsItems
-from swagger_client.models.one_of_event_categories_items import OneOfEventCategoriesItems
+from swagger_client.models.one_of_category_response_events_items import (
+    OneOfCategoryResponseEventsItems,
+)
+from swagger_client.models.one_of_event_categories_items import (
+    OneOfEventCategoriesItems,
+)
 from swagger_client.models.one_of_event_geometry_items import OneOfEventGeometryItems
 from swagger_client.models.one_of_event_sources_items import OneOfEventSourcesItems
 from swagger_client.models.source import Source

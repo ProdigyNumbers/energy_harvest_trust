@@ -52,14 +52,20 @@ class DefaultApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.categories_category_id_get_with_http_info(category_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.categories_category_id_get_with_http_info(
+                category_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.categories_category_id_get_with_http_info(category_id, **kwargs)  # noqa: E501
+            (data) = self.categories_category_id_get_with_http_info(
+                category_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def categories_category_id_get_with_http_info(self, category_id, **kwargs):  # noqa: E501
+    def categories_category_id_get_with_http_info(
+        self, category_id, **kwargs
+    ):  # noqa: E501
         """Returns a json object of categories.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -80,45 +86,54 @@ class DefaultApi(object):
                  returns the request thread.
         """
 
-        all_params = ['category_id', 'source', 'status', 'limit', 'days', 'start', 'end']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = [
+            "category_id",
+            "source",
+            "status",
+            "limit",
+            "days",
+            "start",
+            "end",
+        ]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method categories_category_id_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'category_id' is set
-        if ('category_id' not in params or
-                params['category_id'] is None):
-            raise ValueError("Missing the required parameter `category_id` when calling `categories_category_id_get`")  # noqa: E501
+        if "category_id" not in params or params["category_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `category_id` when calling `categories_category_id_get`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'category_id' in params:
-            path_params['categoryId'] = params['category_id']  # noqa: E501
+        if "category_id" in params:
+            path_params["categoryId"] = params["category_id"]  # noqa: E501
 
         query_params = []
-        if 'source' in params:
-            query_params.append(('source', params['source']))  # noqa: E501
-        if 'status' in params:
-            query_params.append(('status', params['status']))  # noqa: E501
-        if 'limit' in params:
-            query_params.append(('limit', params['limit']))  # noqa: E501
-        if 'days' in params:
-            query_params.append(('days', params['days']))  # noqa: E501
-        if 'start' in params:
-            query_params.append(('start', params['start']))  # noqa: E501
-        if 'end' in params:
-            query_params.append(('end', params['end']))  # noqa: E501
+        if "source" in params:
+            query_params.append(("source", params["source"]))  # noqa: E501
+        if "status" in params:
+            query_params.append(("status", params["status"]))  # noqa: E501
+        if "limit" in params:
+            query_params.append(("limit", params["limit"]))  # noqa: E501
+        if "days" in params:
+            query_params.append(("days", params["days"]))  # noqa: E501
+        if "start" in params:
+            query_params.append(("start", params["start"]))  # noqa: E501
+        if "end" in params:
+            query_params.append(("end", params["end"]))  # noqa: E501
 
         header_params = {}
 
@@ -127,27 +142,30 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            '/categories/{categoryId}', 'GET',
+            "/categories/{categoryId}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='CategoryResponse',  # noqa: E501
+            response_type="CategoryResponse",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def events_get(self, **kwargs):  # noqa: E501
         """Return a json object of events.  # noqa: E501
@@ -173,8 +191,8 @@ class DefaultApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
             return self.events_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.events_get_with_http_info(**kwargs)  # noqa: E501
@@ -205,49 +223,61 @@ class DefaultApi(object):
                  returns the request thread.
         """
 
-        all_params = ['source', 'category', 'status', 'limit', 'days', 'start', 'end', 'mag_id', 'mag_min', 'mag_max', 'bbox']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = [
+            "source",
+            "category",
+            "status",
+            "limit",
+            "days",
+            "start",
+            "end",
+            "mag_id",
+            "mag_min",
+            "mag_max",
+            "bbox",
+        ]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method events_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'source' in params:
-            query_params.append(('source', params['source']))  # noqa: E501
-        if 'category' in params:
-            query_params.append(('category', params['category']))  # noqa: E501
-        if 'status' in params:
-            query_params.append(('status', params['status']))  # noqa: E501
-        if 'limit' in params:
-            query_params.append(('limit', params['limit']))  # noqa: E501
-        if 'days' in params:
-            query_params.append(('days', params['days']))  # noqa: E501
-        if 'start' in params:
-            query_params.append(('start', params['start']))  # noqa: E501
-        if 'end' in params:
-            query_params.append(('end', params['end']))  # noqa: E501
-        if 'mag_id' in params:
-            query_params.append(('magID', params['mag_id']))  # noqa: E501
-        if 'mag_min' in params:
-            query_params.append(('magMin', params['mag_min']))  # noqa: E501
-        if 'mag_max' in params:
-            query_params.append(('magMax', params['mag_max']))  # noqa: E501
-        if 'bbox' in params:
-            query_params.append(('bbox', params['bbox']))  # noqa: E501
+        if "source" in params:
+            query_params.append(("source", params["source"]))  # noqa: E501
+        if "category" in params:
+            query_params.append(("category", params["category"]))  # noqa: E501
+        if "status" in params:
+            query_params.append(("status", params["status"]))  # noqa: E501
+        if "limit" in params:
+            query_params.append(("limit", params["limit"]))  # noqa: E501
+        if "days" in params:
+            query_params.append(("days", params["days"]))  # noqa: E501
+        if "start" in params:
+            query_params.append(("start", params["start"]))  # noqa: E501
+        if "end" in params:
+            query_params.append(("end", params["end"]))  # noqa: E501
+        if "mag_id" in params:
+            query_params.append(("magID", params["mag_id"]))  # noqa: E501
+        if "mag_min" in params:
+            query_params.append(("magMin", params["mag_min"]))  # noqa: E501
+        if "mag_max" in params:
+            query_params.append(("magMax", params["mag_max"]))  # noqa: E501
+        if "bbox" in params:
+            query_params.append(("bbox", params["bbox"]))  # noqa: E501
 
         header_params = {}
 
@@ -256,24 +286,27 @@ class DefaultApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            '/events', 'GET',
+            "/events",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='CategoryResponse',  # noqa: E501
+            response_type="CategoryResponse",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
