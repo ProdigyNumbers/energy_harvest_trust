@@ -26,7 +26,7 @@ for file in files:
 full["date"].unique()
 
 # %%
-full.to_csv("../data/output_clean/other0.csv", index=False)
+full.to_csv("../data/output_clean/other2.csv", index=False)
 
 # %%
 
