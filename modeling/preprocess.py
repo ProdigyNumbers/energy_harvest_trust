@@ -17,16 +17,16 @@ for file in files:
     df = pd.read_csv(os.path.join("../data/output", file))
     df = df[["VH", "latitude", "longitude"]]
     date = file[17:25]
-    df["date"] = pd.to_datetime(date)
-    df['field'] = 'other'
+    df["date"] = date
+    df["field"] = "other"
     full = full.append(df)
 
 
 # %%
-full['date'].unique()
+full["date"].unique()
 
 # %%
-full.to_csv('../data/output_clean/other1.csv',index=False)
+full.to_csv("../data/output_clean/other0.csv", index=False)
 
 # %%
 
