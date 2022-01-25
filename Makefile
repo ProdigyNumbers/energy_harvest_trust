@@ -6,3 +6,5 @@ gitall:
 	
 black:
 	python -m black .
+clean_output:
+	rm -r data/output/
