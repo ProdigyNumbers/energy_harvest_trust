@@ -98,11 +98,11 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
 
     # select polarization
     if polarization == "VV":
-        sentinel1 = sentinel1.select(["VV", "angle"])
+        sentinel1 = sentinel1.select(["VV"])
     elif polarization == "VH":
-        sentinel1 = sentinel1.select(["VH", "angle"])
+        sentinel1 = sentinel1.select(["VH"])
     elif polarization == "VVVH":
-        sentinel1 = sentinel1.select(["VV", "VH", "angle"])
+        sentinel1 = sentinel1.select(["VV", "VH"])
 
     logging.info(
         "Number of images in the collection: {}".format(sentinel1.size().getInfo())
