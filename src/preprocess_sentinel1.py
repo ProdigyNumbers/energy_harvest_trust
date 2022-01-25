@@ -30,6 +30,8 @@ import logging
 import geopandas as gpd
 import urllib
 
+import src.algorithm_border_noise as abn
+
 
 def preprocess_sentinel1(parameters: SimpleNamespace):
 
@@ -40,7 +42,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     orbit = parameters.orbit
     if parameters.geometry.type == "Polygon":
         geometry = ee.Geometry.Polygon(parameters.geometry.coordinates)
-    # border_noise_correction = parameters.border_noise_correction
+    border_noise_correction = parameters.border_noise_correction
     # speckle_filtering = parameters.speckle_filtering
     # speckle_filter = parameters.speckle_filter
     # format = parameters.format
@@ -50,6 +52,9 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     output_path = parameters.output_path
 
     # check the validity of the parameters
+    if border_noise_correction is None:
+        border_noise_correction = True
+
     # if speckle_filter is None:
     #     speckle_filter = 'BOX_CAR'
     # if format is None:
@@ -89,7 +94,6 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VV"))
         .filterDate(start_date, end_date)
         .filterBounds(geometry)
-        .select(["VH"])
     )
 
     # select orbit
@@ -98,15 +102,19 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
 
     # select polarization
     if polarization == "VV":
-        sentinel1 = sentinel1.select(["VV"])
+        sentinel1 = sentinel1.select(["VV", "angle"])
     elif polarization == "VH":
-        sentinel1 = sentinel1.select(["VH"])
+        sentinel1 = sentinel1.select(["VH", "angle"])
     elif polarization == "VVVH":
-        sentinel1 = sentinel1.select(["VV", "VH"])
+        sentinel1 = sentinel1.select(["VV", "VH", "angle"])
 
     logging.info(
         "Number of images in the collection: {}".format(sentinel1.size().getInfo())
     )
+
+    if border_noise_correction:
+        sentinel1 = sentinel1.map(abn.mask_border_noise_artefacts)
+        logging.info("Border noise correction applied")
 
     if clip_to_region:
         sentinel1 = sentinel1.map(lambda image: image.clip(geometry))
