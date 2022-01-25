@@ -18,11 +18,13 @@ for file in files:
     df = df[["VH", "latitude", "longitude"]]
     date = file[17:25]
     df["date"] = date
-    df["field"] = "paddy"
+    df["field"] = "other"
     full = full.append(df)
+# %%
+full.shape
 
 # %%
-full.to_csv("../data/output_clean/paddy15.csv", index=False)
+full.to_csv("../data/output_clean/other15.csv", index=False)
 
 
 # %%

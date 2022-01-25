@@ -18,6 +18,19 @@ plt.style.use("seaborn-whitegrid")
 other0 = pd.read_csv("../data/output_clean/other0.csv")
 other1 = pd.read_csv("../data/output_clean/other1.csv")
 other2 = pd.read_csv("../data/output_clean/other2.csv")
+other3 = pd.read_csv("../data/output_clean/other3.csv")
+other4 = pd.read_csv("../data/output_clean/other4.csv")
+other5 = pd.read_csv("../data/output_clean/other5.csv")
+other6 = pd.read_csv("../data/output_clean/other6.csv")
+other7 = pd.read_csv("../data/output_clean/other7.csv")
+other8 = pd.read_csv("../data/output_clean/other8.csv")
+other9 = pd.read_csv("../data/output_clean/other9.csv")
+other10 = pd.read_csv("../data/output_clean/other10.csv")
+other11 = pd.read_csv("../data/output_clean/other11.csv")
+other12 = pd.read_csv("../data/output_clean/other12.csv")
+other13 = pd.read_csv("../data/output_clean/other13.csv")
+other14 = pd.read_csv("../data/output_clean/other14.csv")
+other15 = pd.read_csv("../data/output_clean/other15.csv")
 
 paddy0 = pd.read_csv("../data/output_clean/paddy0.csv")
 paddy1 = pd.read_csv("../data/output_clean/paddy1.csv")
@@ -36,7 +49,24 @@ paddy13 = pd.read_csv("../data/output_clean/paddy13.csv")
 paddy14 = pd.read_csv("../data/output_clean/paddy14.csv")
 paddy15 = pd.read_csv("../data/output_clean/paddy15.csv")
 # %%
-others_data = [other0, other1, other2]
+others_data = [
+    other0,
+    other1,
+    other2,
+    other3,
+    other4,
+    other5,
+    other6,
+    other7,
+    other8,
+    other9,
+    other10,
+    other11,
+    other12,
+    other13,
+    other14,
+    other15,
+]
 paddy_data = [
     paddy0,
     paddy1,
@@ -68,13 +98,6 @@ for data in paddy_data:
 # %%
 plt.figure()
 plt.title("Yearly horizontal backscatter evolution of fields with paddy and non-paddy")
-# Other
-for i, data in enumerate(others_data):
-    if i == 0:
-        plt.plot(data.groupby("date")["VH"].mean(), label="Other", color="b")
-    else:
-        plt.plot(data.groupby("date")["VH"].mean(), color="b")
-
 
 # Paddy
 for i, data in enumerate(paddy_data):
@@ -82,6 +105,17 @@ for i, data in enumerate(paddy_data):
         plt.plot(data.groupby("date")["VH"].mean(), label="Paddy", color="r")
     else:
         plt.plot(data.groupby("date")["VH"].mean(), color="r")
+        
+# Other
+for i, data in enumerate(others_data):
+    if i == 0:
+        plt.plot(data.groupby("date")["VH"].mean(), label="Other", color="b")
+    elif i>3:
+        plt.plot(data.groupby("date")["VH"].mean(), color="k")
+    else:
+        plt.plot(data.groupby("date")["VH"].mean(), color="b")
+
+
 
 
 plt.xticks(rotation=45)
@@ -112,5 +146,7 @@ plt.savefig("images/yearly_aggregated.png")
 plt.show()
 # %%
 
-
+other.shape
+# %%
+paddy.shape
 # %%
