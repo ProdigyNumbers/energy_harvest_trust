@@ -100,9 +100,11 @@ for data in paddy_data:
 
 # %%
 plt.figure()
-plt.title("Aggregated VH evolution of fields with paddy (15 fields) and non-paddy (3 fields)")
-plt.plot(other.groupby("date")["VH"].mean(),label="Other", color="b")
-plt.plot(paddy.groupby("date")["VH"].mean(),label="Paddy", color="r")
+plt.title(
+    "Aggregated VH evolution of fields with paddy (15 fields) and non-paddy (3 fields)"
+)
+plt.plot(other.groupby("date")["VH"].mean(), label="Other", color="b")
+plt.plot(paddy.groupby("date")["VH"].mean(), label="Paddy", color="r")
 plt.xticks(rotation=45)
 plt.ylabel("VH Backscatter")
 plt.legend()
