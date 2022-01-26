@@ -31,5 +31,6 @@
     "clip_to_region": true,
     "save_to_drive": true,
     "write_to_csv": true,
-    "output_path": "data/output"
+    "output_path": "data/output",
+    "border_noise_correction": true
 }
