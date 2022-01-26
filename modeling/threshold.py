@@ -99,6 +99,7 @@ for data in paddy_data:
     data["date"] = pd.to_datetime(data["date"].astype(str))
     print(data.shape)
     data["paddy"] = 1
+
 # %%
 df = pd.DataFrame()
 for data in others_data:
@@ -178,14 +179,17 @@ vals = set([int(i) for i in data["VH"].values])
 prec = []
 rec = []
 aucs = []
+perc = []
 for val in vals:
     preds = np.where(data.VH < val, 1, 0)
     tn, fp, fn, tp = confusion_matrix(data["paddy"].values, preds).ravel()
     precision = tp / (tp + fp)
     recall = tp / (tp + fn)
-    aucs.append(roc_auc_score(data["paddy"].values,preds))
+    aucs.append(roc_auc_score(data["paddy"].values, preds))
     prec.append(precision)
     rec.append(recall)
+
+    perc.append(data[data.VH < val].shape[0] / data.shape[0])
 
 # %%
 plt.figure()
@@ -193,8 +197,13 @@ plt.title("Precision and Recall at different VH values for 7 Month")
 plt.plot(list(vals), prec, label="Precision")
 plt.plot(list(vals), rec, label="Recall")
 plt.plot(list(vals), aucs, label="AUC")
+plt.plot(list(vals), perc, label="Percentage of data points")
 plt.xlabel("VH Index")
 plt.ylabel("Precision|Recall")
 plt.legend()
 plt.savefig("images/precisionRecallvariation.png")
 plt.show()
+
+# %%
+data[data.VH < val].shape[0]
+# %%
