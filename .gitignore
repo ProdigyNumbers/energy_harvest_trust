@@ -144,3 +144,4 @@ typings/
 
 # Ignore output directory
 data/output
+*.csv

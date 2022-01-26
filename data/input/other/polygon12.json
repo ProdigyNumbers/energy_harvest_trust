@@ -1,0 +1,22 @@
+{
+    "start_date": "2020-01-01",
+    "end_date": "2021-01-01",
+    "polarization": "VH",
+    "orbit": "DESCENDING",
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+
+            [76.61401205302113,30.54614988129096],
+            [76.61393480527053,30.545129792243],
+            [76.61464720024682,30.545070655806512],
+            [76.6147330309353,30.546090746039752],
+            [76.61401205302113,30.54614988129096]
+
+ ]
+    },
+    "clip_to_region": true,
+    "save_to_drive": true,
+    "write_to_csv": true,
+    "output_path": "data/output"
+}
