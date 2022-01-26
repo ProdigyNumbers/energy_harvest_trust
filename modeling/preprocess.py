@@ -24,7 +24,7 @@ for file in files:
 full.shape
 
 # %%
-full.to_csv("../data/output_clean/other15.csv", index=False)
+full.to_csv("../data/output_clean/other18.csv", index=False)
 
 
 # %%
