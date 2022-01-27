@@ -88,10 +88,10 @@ paddy_data = [
 # %%
 for data in others_data:
     data["date"] = pd.to_datetime(data["date"].astype(str))
-    print(data.shape)
+
 for data in paddy_data:
     data["date"] = pd.to_datetime(data["date"].astype(str))
-    print(data.shape)
+
 # %%
 
 
@@ -142,7 +142,11 @@ plt.savefig("images/yearly_aggregated.png")
 plt.show()
 # %%
 
-other.shape
-# %%
-paddy.shape
-# %%
+plt.figure()
+plt.title("Horizontal backscatter (10m pixel) distribution for July 2020")
+sns.kdeplot(other[other["date"].dt.month == 7].VH.values, shade=True, label="Other")
+sns.kdeplot(paddy[paddy["date"].dt.month == 7].VH.values, shade=True, label="Paddy")
+plt.ylabel("VH Index")
+plt.legend()
+plt.savefig("images/pixelDensityPlotJuly.png")
+plt.show()
