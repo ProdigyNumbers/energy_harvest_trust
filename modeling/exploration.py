@@ -150,3 +150,16 @@ plt.ylabel("VH Index")
 plt.legend()
 plt.savefig("images/pixelDensityPlotJuly.png")
 plt.show()
+
+# %%
+plt.figure()
+plt.title("Horizontal backscatter (10m pixel) distribution for March 2020")
+sns.kdeplot(other[other["date"].dt.month == 3].VH.values, shade=True, label="Other")
+sns.kdeplot(paddy[paddy["date"].dt.month == 3].VH.values, shade=True, label="Paddy")
+plt.ylabel("VH Index")
+plt.legend()
+plt.savefig("images/pixelDensityPlotMarch.png")
+plt.show()
+# %%
+
+# %%
