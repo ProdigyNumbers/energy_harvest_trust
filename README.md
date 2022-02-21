@@ -63,7 +63,10 @@ This project is aimed at reducing crop burning and air pollution by:
 
 
 #### List of to-dos
-
+1. Collect labeled data on fields on the ground. Ideally boxes with lat-long but doesn't need to be too accurate. We'll assume that the parts of an image not labeled as a field is not a field.
+2. Identify approaches or models to detect crops/vegetation in satellite images. The goal would be to detect whether asomething is being grown in a given box.
+3. Build crop type detectors for each crop that we care about. We've done a first pass on rice but can move to cotton.
+4. Estimate size of crop.
 
 #### References
 
