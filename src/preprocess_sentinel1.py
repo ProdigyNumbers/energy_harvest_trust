@@ -23,32 +23,41 @@
         An ee.ImageCollection with an analysis ready Sentinel 1 imagery with the specified
         polarization images and angle band.
 """
-import ee
 import json
-from types import SimpleNamespace
 import logging
-import geopandas as gpd
+import os
 import urllib
+from types import SimpleNamespace
+
+import ee
+import geopandas as gpd
+
+from src.logger_factory import LoggerFactory
+
+logger = LoggerFactory('preprocess_sentinel1').get_logger()
 
 
-def preprocess_sentinel1(parameters: SimpleNamespace):
+def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
 
-    # extract parameters
-    start_date = ee.Date(parameters.start_date)
-    end_date = ee.Date(parameters.end_date)
-    polarization = parameters.polarization
-    orbit = parameters.orbit
+    # extract configuration parameters
+    start_date = ee.Date(config.start_date)
+    end_date = ee.Date(config.end_date)
+    polarization = config.polarization
+    orbit = config.orbit
     if parameters.geometry.type == "Polygon":
         geometry = ee.Geometry.Polygon(parameters.geometry.coordinates)
     # border_noise_correction = parameters.border_noise_correction
     # speckle_filtering = parameters.speckle_filtering
     # speckle_filter = parameters.speckle_filter
     # format = parameters.format
-    clip_to_region = parameters.clip_to_region
-    save_to_drive = parameters.save_to_drive
-    write_to_csv = parameters.write_to_csv
-    output_path = parameters.output_path
+    clip_to_region = config.clip_to_region
+    save_to_drive = config.save_to_drive
+    write_to_csv = config.write_to_csv
+    output_path = config.output_path
 
+    # Create output_path in case it doesn't exist
+    os.makedirs(output_path, exist_ok=True)
+    
     # check the validity of the parameters
     # if speckle_filter is None:
     #     speckle_filter = 'BOX_CAR'
@@ -60,16 +69,12 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     polarization_band = ["VV", "VH", "VVVH"]
     if polarization not in polarization_band:
         raise ValueError(
-            "The polarization must be one of the following: {}".format(
-                polarization_band
-            )
-        )
+            f"The polarization must be one of the following: {polarization_band}")
 
     orbit_values = ["ASCENDING", "DESCENDING", "BOTH"]
     if orbit not in orbit_values:
         raise ValueError(
-            "The orbit must be one of the following: {}".format(orbit_values)
-        )
+            f"The orbit must be one of the following: {orbit_values}")
 
     # format_values = ['LINEAR', 'DB']
     # if format not in format_values:
@@ -104,9 +109,8 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
     elif polarization == "VVVH":
         sentinel1 = sentinel1.select(["VV", "VH"])
 
-    logging.info(
-        "Number of images in the collection: {}".format(sentinel1.size().getInfo())
-    )
+    logger.info(
+        f"Number of images in the collection: {sentinel1.size().getInfo()}")
 
     if clip_to_region:
         sentinel1 = sentinel1.map(lambda image: image.clip(geometry))
@@ -163,11 +167,11 @@ def preprocess_sentinel1(parameters: SimpleNamespace):
 
             # task.start()
             # logging.info("Exporting image {} to {}".format(image_name, output_path))
-            logging.info("Exporting image {} to Local Drive".format(image_name))
+            logger.info(f"Exporting image {image_name} to Local Drive")
     return sentinel1
 
 
-def load_data(input_parameters: str):
+def load_data(input_parameters: str, config: SimpleNamespace):
     ee.Initialize()
     # parameters = json.loads(
     #     input_parameters, object_hook=lambda d: SimpleNamespace(**d)
@@ -176,4 +180,11 @@ def load_data(input_parameters: str):
         parameters = json.load(f)
         f.seek(0)
         parameters = json.load(f, object_hook=lambda d: SimpleNamespace(**d))
-        sentinel1_data = preprocess_sentinel1(parameters)
+        sentinel1_data = preprocess_sentinel1(parameters, config)
+
+def load_config(config_file: str):
+    with open(config_file, "r") as f:
+        config = json.load(f)
+        f.seek(0)
+        config = json.load(f, object_hook=lambda d: SimpleNamespace(**d))
+    return config
