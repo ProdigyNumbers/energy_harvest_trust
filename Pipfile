@@ -18,6 +18,8 @@ geemap = "*"
 python-dotenv = "*"
 ipython = "*"
 argparse = "*"
+osmnx = "*"
+pyrosm = "*"
 
 [dev-packages]
 black = "*"
@@ -26,6 +28,7 @@ nose = "*"
 pluggy = "*"
 ipython = "*"
 flake8 = "*"
+isort = "*"
 
 [requires]
 python_version = "3.9"

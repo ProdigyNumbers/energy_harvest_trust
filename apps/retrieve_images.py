@@ -1,9 +1,12 @@
 import argparse
 import logging
-import os, sys
+import os
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import src.preprocess_sentinel1 as ps1
+
+# import sys
+
 
 """
 Command line interface for retrieving Sentinel-1 images and saving them to Google Drive.
