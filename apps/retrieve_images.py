@@ -2,10 +2,11 @@ import argparse
 from pathlib import Path
 
 from src.logger_factory import LoggerFactory
+
 # sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.preprocess_sentinel1 import load_config, load_data
 
-logger = LoggerFactory('retrieve_images').get_logger()
+logger = LoggerFactory("retrieve_images").get_logger()
 
 
 # import sys
@@ -24,14 +25,15 @@ parser.add_argument(
     "--input_poly_file", type=str, help="File containing the input polygon"
 )
 parser.add_argument(
-    "--config", action='append', help='Configuration file to drive algorithm.')
+    "--config", action="append", help="Configuration file to drive algorithm."
+)
 
 args = parser.parse_args()
 
 if args.config is not None:
     config_file = args.config[0]
     config = load_config(config_file)
-       
+
     if args.input_poly_file is not None:
         input_poly_file = args.input_poly_file
         input_poly_file = Path(input_poly_file)

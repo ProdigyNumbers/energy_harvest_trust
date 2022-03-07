@@ -34,7 +34,7 @@ import geopandas as gpd
 
 from src.logger_factory import LoggerFactory
 
-logger = LoggerFactory('preprocess_sentinel1').get_logger()
+logger = LoggerFactory("preprocess_sentinel1").get_logger()
 
 
 def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
@@ -57,7 +57,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
 
     # Create output_path in case it doesn't exist
     os.makedirs(output_path, exist_ok=True)
-    
+
     # check the validity of the parameters
     # if speckle_filter is None:
     #     speckle_filter = 'BOX_CAR'
@@ -69,12 +69,12 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
     polarization_band = ["VV", "VH", "VVVH"]
     if polarization not in polarization_band:
         raise ValueError(
-            f"The polarization must be one of the following: {polarization_band}")
+            f"The polarization must be one of the following: {polarization_band}"
+        )
 
     orbit_values = ["ASCENDING", "DESCENDING", "BOTH"]
     if orbit not in orbit_values:
-        raise ValueError(
-            f"The orbit must be one of the following: {orbit_values}")
+        raise ValueError(f"The orbit must be one of the following: {orbit_values}")
 
     # format_values = ['LINEAR', 'DB']
     # if format not in format_values:
@@ -109,8 +109,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
     elif polarization == "VVVH":
         sentinel1 = sentinel1.select(["VV", "VH"])
 
-    logger.info(
-        f"Number of images in the collection: {sentinel1.size().getInfo()}")
+    logger.info(f"Number of images in the collection: {sentinel1.size().getInfo()}")
 
     if clip_to_region:
         sentinel1 = sentinel1.map(lambda image: image.clip(geometry))
@@ -181,6 +180,7 @@ def load_data(input_parameters: str, config: SimpleNamespace):
         f.seek(0)
         parameters = json.load(f, object_hook=lambda d: SimpleNamespace(**d))
         sentinel1_data = preprocess_sentinel1(parameters, config)
+
 
 def load_config(config_file: str):
     with open(config_file, "r") as f:
