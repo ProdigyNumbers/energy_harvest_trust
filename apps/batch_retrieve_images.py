@@ -12,8 +12,8 @@ Command line interface for batch retrieving Sentinel-1 images and saving them to
 Before running this script, you need to have a Google account and a Google Drive account.
 Followed by the following steps:
 `$ earthengine authenticate`
-`$ python apps/batch_retrieve_images.py --input_data_dir ./data/input/paddy/polygons --config \
-   ./data/input/paddy/config/config.json`
+`$ python apps/batch_retrieve_images.py --input_data_dir ./data/input/only_fields/onlyFields.geojson --config \
+   ./data/input/only_fields/config/config.json`
 """
 
 if __name__ == "__main__":
