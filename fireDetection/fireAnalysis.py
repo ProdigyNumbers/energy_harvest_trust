@@ -28,11 +28,11 @@ folium.Circle(
 for index, row in df.iterrows():
 
     folium.Circle(
-            radius=100,
-            location=[row["latitude"], row["longitude"]],
-            color="crimson",
-            fill=False,
-        ).add_to(m)
+        radius=100,
+        location=[row["latitude"], row["longitude"]],
+        color="crimson",
+        fill=False,
+    ).add_to(m)
 # %%
 m
 # %%
