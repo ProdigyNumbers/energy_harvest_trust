@@ -54,7 +54,7 @@ class Configuration:
 def create_configuration(config: SimpleNamespace) -> Configuration:
     start_date = ee.Date(config.start_date)
     end_date = ee.Date(config.end_date)
-    polarization_list = config.polarization.replace(" ", "").split(',')
+    polarization_list = config.polarization.replace(" ", "").split(",")
     orbit = config.orbit
     clip_to_region = config.clip_to_region
     save_to_drive = config.save_to_drive
