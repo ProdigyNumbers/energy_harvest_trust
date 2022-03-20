@@ -26,8 +26,8 @@
 import json
 import os
 import urllib
-from calendar import c
 from types import SimpleNamespace
+from typing import List
 
 import ee
 import geojson
@@ -43,7 +43,7 @@ from dataclasses import dataclass
 class Configuration:
     start_date: ee.Date
     end_date: ee.Date
-    polarization: str
+    polarization_list: List[str]
     orbit: str
     clip_to_region: bool
     save_to_drive: bool
@@ -54,7 +54,7 @@ class Configuration:
 def create_configuration(config: SimpleNamespace) -> Configuration:
     start_date = ee.Date(config.start_date)
     end_date = ee.Date(config.end_date)
-    polarization = config.polarization
+    polarization_list = config.polarization.replace(" ", "").split(',')
     orbit = config.orbit
     clip_to_region = config.clip_to_region
     save_to_drive = config.save_to_drive
@@ -63,7 +63,7 @@ def create_configuration(config: SimpleNamespace) -> Configuration:
     return Configuration(
         start_date,
         end_date,
-        polarization,
+        polarization_list,
         orbit,
         clip_to_region,
         save_to_drive,
@@ -79,8 +79,9 @@ def validate_configuration(config: Configuration):
     if config.orbit is None:
         config.orbit = "BOTH"
 
-    polarization_band = ["VV", "VH", "VVVH"]
-    if config.polarization not in polarization_band:
+    polarization_band = ["HH", "HV", "VV", "VH"]
+    valid_pol_list = all(item in polarization_band for item in config.polarization_list)
+    if not valid_pol_list:
         raise ValueError(
             f"The polarization must be one of the following: {polarization_band}"
         )
@@ -101,17 +102,16 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
     if geometry.type == "Polygon":
         polygon = ee.Geometry.Polygon(geometry.coordinates)
 
-        # read more about the data collection here https://developers.google.com/earth-engine/tutorials/community/sar-basics
+        # read more about the data collection here
+        # https://developers.google.com/earth-engine/tutorials/community/sar-basics
         # get the Sentinel-1 data image collection
         sentinel1 = (
             ee.ImageCollection("COPERNICUS/S1_GRD")
             .filter(ee.Filter.eq("instrumentMode", "IW"))
             .filter(ee.Filter.eq("resolution_meters", 10))
-            .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))
-            .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VV"))
             .filterDate(configuration.start_date, configuration.end_date)
             .filterBounds(polygon)
-            .select(["VH"])
+            # .select(["VH", "VV", "HH", "HV"])
         )
 
         # select orbit
@@ -121,12 +121,16 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
             )
 
         # select polarization
-        if configuration.polarization == "VV":
-            sentinel1 = sentinel1.select(["VV"])
-        elif configuration.polarization == "VH":
-            sentinel1 = sentinel1.select(["VH"])
-        elif configuration.polarization == "VVVH":
-            sentinel1 = sentinel1.select(["VV", "VH"])
+        if configuration.polarization_list != [""]:
+            sentinel1 = sentinel1.select(configuration.polarization_list)
+        # if configuration.polarization == "VV":
+        #     sentinel1 = sentinel1.select(["VV"])
+        # elif configuration.polarization == "VH":
+        #     sentinel1 = sentinel1.select(["VH"])
+        # elif configuration.polarization == "VVVH":
+        #     sentinel1 = sentinel1.select(["VV", "VH"])
+        # elif configuration.polarization == "VVVHHH":
+        #     sentinel1 = sentinel1.select(["VV", "VH", ])
 
         logger.info(f"Number of images in the collection: {sentinel1.size().getInfo()}")
 
@@ -211,9 +215,11 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
         .filter(ee.Filter.eq("resolution_meters", 10))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VV"))
+        .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "HV"))
+        .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "HH"))
         .filterDate(configuration.start_date, configuration.end_date)
         .filterBounds(geometry)
-        .select(["VH"])
+        .select(["VH", "VV", "HV", "HH"])
     )
 
     # select orbit
@@ -223,12 +229,14 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
         )
 
     # select polarization
-    if configuration.polarization == "VV":
-        sentinel1 = sentinel1.select(["VV"])
-    elif configuration.polarization == "VH":
-        sentinel1 = sentinel1.select(["VH"])
-    elif configuration.polarization == "VVVH":
-        sentinel1 = sentinel1.select(["VV", "VH"])
+    if configuration.polarization_list != [""]:
+        sentinel1 = sentinel1.select(configuration.polarization_list)
+    # if configuration.polarization == "VV":
+    #     sentinel1 = sentinel1.select(["VV"])
+    # elif configuration.polarization == "VH":
+    #     sentinel1 = sentinel1.select(["VH"])
+    # elif configuration.polarization == "VVVH":
+    #     sentinel1 = sentinel1.select(["VV", "VH"])
 
     logger.info(f"Number of images in the collection: {sentinel1.size().getInfo()}")
 
