@@ -25,7 +25,7 @@ folium.Circle(
 ).add_to(m)
 
 # %%
-for index, row in df.iterrows():
+for index, row in firms.iterrows():
 
     folium.Circle(
             radius=100,
@@ -35,4 +35,6 @@ for index, row in df.iterrows():
         ).add_to(m)
 # %%
 m
+# %%
+firms.head()
 # %%
