@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from src.logger_factory import LoggerFactory
-from src.preprocess_sentinel1 import load_config, load_data
+from src.preprocess_sentinel1 import load_config, load_data_collection
 
 logger = LoggerFactory("batch_retrieve_images").get_logger()
 
@@ -36,10 +36,8 @@ if __name__ == "__main__":
         if args.input_data_dir is not None:
             input_data_dir = args.input_data_dir
             input_data_dir = Path(input_data_dir)
-            if input_data_dir.is_dir():
-                logger.info(f"Reading input parameters from {input_data_dir}")
-                for file in input_data_dir.iterdir():
-                    if file.is_file():
-                        load_data(str(file), config)
+            if input_data_dir.is_file():
+                logger.info(f"Reading input parameters from file {input_data_dir}")
+                load_data_collection(str(input_data_dir), config)
             else:
                 raise Exception(f"Directory {input_data_dir} does not exist")

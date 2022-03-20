@@ -144,4 +144,5 @@ typings/
 
 # Ignore output directory
 data/output
+data/osm
 *.csv
