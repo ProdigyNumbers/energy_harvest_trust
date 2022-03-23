@@ -25,6 +25,25 @@ def extract_state_dataframe(
     return state_gdf
 
 
+def extract_district_dataframe(
+    countryGDF: gpd.geodataframe.GeoDataFrame, district_name: str
+) -> gpd.geodataframe.GeoDataFrame:
+    """Extracts the geodataframe for a given district from the gadm level 2 shapefile of a country
+
+    Args:
+        countryGDF (gpd.geodataframe.GeoDataFrame): GeoDataFrame of the gadm36 level 2 shapefile of a country
+        district_name (str): Name of a district present in the country represented by countryGDF.
+
+    Returns:
+        gpd.geodataframe.GeoDataFrame: GeoDataFrame of the state as extracted from countryGDF
+    """
+    district_gdf: gpd.geodataframe.GeoDataFrame = countryGDF[
+        countryGDF["NAME_2"] == district_name
+    ]
+    district_gdf = district_gdf[["NAME_2", "geometry"]]
+    return district_gdf
+
+
 def region_extents(region_gdf: gpd.geodataframe.GeoDataFrame) -> Extents:
     """Computes the extents the bounding box of a given geo dataframe.
 

@@ -1,0 +1,10 @@
+{
+  "start_date": "2020-01-01",
+  "end_date": "2021-01-01",
+  "polarization": "VV, VH",
+  "orbit": "DESCENDING",
+  "clip_to_region": true,
+  "save_to_drive": true,
+  "write_to_csv": true,
+  "output_path": "data/output/non_fields"
+}

@@ -24,57 +24,180 @@
         polarization images and angle band.
 """
 import json
-import logging
 import os
 import urllib
 from types import SimpleNamespace
+from typing import List
 
 import ee
-import geopandas as gpd
+import geojson
 
 from src.logger_factory import LoggerFactory
 
 logger = LoggerFactory("preprocess_sentinel1").get_logger()
 
+from dataclasses import dataclass
+
+
+@dataclass
+class Configuration:
+    start_date: ee.Date
+    end_date: ee.Date
+    polarization_list: List[str]
+    orbit: str
+    clip_to_region: bool
+    save_to_drive: bool
+    write_to_csv: bool
+    output_path: str
+
+
+def create_configuration(config: SimpleNamespace) -> Configuration:
+    start_date = ee.Date(config.start_date)
+    end_date = ee.Date(config.end_date)
+    polarization_list = config.polarization.replace(" ", "").split(",")
+    orbit = config.orbit
+    clip_to_region = config.clip_to_region
+    save_to_drive = config.save_to_drive
+    write_to_csv = config.write_to_csv
+    output_path = config.output_path
+    return Configuration(
+        start_date,
+        end_date,
+        polarization_list,
+        orbit,
+        clip_to_region,
+        save_to_drive,
+        write_to_csv,
+        output_path,
+    )
+
+
+def validate_configuration(config: Configuration):
+    # Create output_path in case it doesn't exist
+    os.makedirs(config.output_path, exist_ok=True)
+
+    if config.orbit is None:
+        config.orbit = "BOTH"
+
+    polarization_band = ["HH", "HV", "VV", "VH"]
+    valid_pol_list = all(item in polarization_band for item in config.polarization_list)
+    if not valid_pol_list:
+        raise ValueError(
+            f"The polarization must be one of the following: {polarization_band}"
+        )
+
+    orbit_values = ["ASCENDING", "DESCENDING", "BOTH"]
+    if config.orbit not in orbit_values:
+        raise ValueError(f"The orbit must be one of the following: {orbit_values}")
+
+    return config
+
+
+def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleNamespace):
+    # create configuration polygons
+    configuration: Configuration = create_configuration(config)
+    # validate configuration
+    configuration = validate_configuration(config=configuration)
+
+    if geometry.type == "Polygon":
+        polygon = ee.Geometry.Polygon(geometry.coordinates)
+
+        # read more about the data collection here
+        # https://developers.google.com/earth-engine/tutorials/community/sar-basics
+        # get the Sentinel-1 data image collection
+        sentinel1 = (
+            ee.ImageCollection("COPERNICUS/S1_GRD")
+            .filter(ee.Filter.eq("instrumentMode", "IW"))
+            .filter(ee.Filter.eq("resolution_meters", 10))
+            .filterDate(configuration.start_date, configuration.end_date)
+            .filterBounds(polygon)
+            # .select(["VH", "VV", "HH", "HV"])
+        )
+
+        # select orbit
+        if configuration.orbit != "BOTH":
+            sentinel1 = sentinel1.filter(
+                ee.Filter.eq("orbitProperties_pass", configuration.orbit)
+            )
+
+        # select polarization
+        if configuration.polarization_list != [""]:
+            sentinel1 = sentinel1.select(configuration.polarization_list)
+        # if configuration.polarization == "VV":
+        #     sentinel1 = sentinel1.select(["VV"])
+        # elif configuration.polarization == "VH":
+        #     sentinel1 = sentinel1.select(["VH"])
+        # elif configuration.polarization == "VVVH":
+        #     sentinel1 = sentinel1.select(["VV", "VH"])
+        # elif configuration.polarization == "VVVHHH":
+        #     sentinel1 = sentinel1.select(["VV", "VH", ])
+
+        logger.info(f"Number of images in the collection: {sentinel1.size().getInfo()}")
+
+        if configuration.clip_to_region:
+            sentinel1 = sentinel1.map(lambda image: image.clip(geometry))
+
+        if configuration.save_to_drive:
+            size = sentinel1.size().getInfo()
+            image_list = sentinel1.toList(size)
+            for id in range(0, size):
+                image = image_list.get(id)
+                image = ee.Image(image)
+                image_name = str(image.id().getInfo())
+                description = image_name
+
+                image = image.clip(geometry)
+                if configuration.write_to_csv:
+                    # Add a layer to image with lat, lon.
+                    image_lat = image.addBands(image.pixelLonLat())
+                    # Extract a sample as csv
+                    csv_url = image_lat.sample(
+                        region=sentinel1.geometry(),
+                        dropNulls=True,
+                        scale=10,
+                        geometries=True,
+                    ).getDownloadUrl()
+                    urllib.request.urlretrieve(
+                        csv_url, configuration.output_path + "/" + image_name + ".csv"
+                    )
+
+                image_path = image.getDownloadUrl(
+                    {
+                        "scale": 10,
+                        "region": sentinel1.geometry().getInfo(),
+                        "crs": "EPSG:4326",
+                        "description": description,
+                        "fileFormat": "GeoTIFF",
+                        "maxPixels": 1e13,
+                        "fileNamePrefix": image_name,
+                    }
+                )
+                urllib.request.urlretrieve(
+                    image_path, configuration.output_path + "/" + image_name + ".tif"
+                )
+
+                logger.info(f"Exporting image {image_name} to Local Drive")
+        return sentinel1
+
 
 def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
 
+    geometry = ee.Geometry.Polygon()
     # extract configuration parameters
-    start_date = ee.Date(config.start_date)
-    end_date = ee.Date(config.end_date)
-    polarization = config.polarization
-    orbit = config.orbit
+    configuration: Configuration = create_configuration(config)
+    configuration = validate_configuration(configuration)
     if parameters.geometry.type == "Polygon":
         geometry = ee.Geometry.Polygon(parameters.geometry.coordinates)
     # border_noise_correction = parameters.border_noise_correction
     # speckle_filtering = parameters.speckle_filtering
     # speckle_filter = parameters.speckle_filter
     # format = parameters.format
-    clip_to_region = config.clip_to_region
-    save_to_drive = config.save_to_drive
-    write_to_csv = config.write_to_csv
-    output_path = config.output_path
-
-    # Create output_path in case it doesn't exist
-    os.makedirs(output_path, exist_ok=True)
 
     # check the validity of the parameters
     # if speckle_filter is None:
     #     speckle_filter = 'BOX_CAR'
     # if format is None:
     #     format = 'DB'
-    if orbit is None:
-        orbit = "BOTH"
-
-    polarization_band = ["VV", "VH", "VVVH"]
-    if polarization not in polarization_band:
-        raise ValueError(
-            f"The polarization must be one of the following: {polarization_band}"
-        )
-
-    orbit_values = ["ASCENDING", "DESCENDING", "BOTH"]
-    if orbit not in orbit_values:
-        raise ValueError(f"The orbit must be one of the following: {orbit_values}")
 
     # format_values = ['LINEAR', 'DB']
     # if format not in format_values:
@@ -92,29 +215,33 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
         .filter(ee.Filter.eq("resolution_meters", 10))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VV"))
-        .filterDate(start_date, end_date)
+        .filterDate(configuration.start_date, configuration.end_date)
         .filterBounds(geometry)
-        .select(["VH"])
+        .select(["VH", "VV"])
     )
 
     # select orbit
-    if orbit != "BOTH":
-        sentinel1 = sentinel1.filter(ee.Filter.eq("orbitProperties_pass", orbit))
+    if configuration.orbit != "BOTH":
+        sentinel1 = sentinel1.filter(
+            ee.Filter.eq("orbitProperties_pass", configuration.orbit)
+        )
 
     # select polarization
-    if polarization == "VV":
-        sentinel1 = sentinel1.select(["VV"])
-    elif polarization == "VH":
-        sentinel1 = sentinel1.select(["VH"])
-    elif polarization == "VVVH":
-        sentinel1 = sentinel1.select(["VV", "VH"])
+    if configuration.polarization_list != [""]:
+        sentinel1 = sentinel1.select(configuration.polarization_list)
+    # if configuration.polarization == "VV":
+    #     sentinel1 = sentinel1.select(["VV"])
+    # elif configuration.polarization == "VH":
+    #     sentinel1 = sentinel1.select(["VH"])
+    # elif configuration.polarization == "VVVH":
+    #     sentinel1 = sentinel1.select(["VV", "VH"])
 
     logger.info(f"Number of images in the collection: {sentinel1.size().getInfo()}")
 
-    if clip_to_region:
+    if configuration.clip_to_region:
         sentinel1 = sentinel1.map(lambda image: image.clip(geometry))
 
-    if save_to_drive:
+    if configuration.save_to_drive:
         size = sentinel1.size().getInfo()
         image_list = sentinel1.toList(size)
         for id in range(0, size):
@@ -124,7 +251,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
             description = image_name
 
             image = image.clip(geometry)
-            if write_to_csv:
+            if configuration.write_to_csv:
                 # Add a layer to image with lat, lon.
                 image_lat = image.addBands(image.pixelLonLat())
                 # Extract a sample as csv
@@ -135,7 +262,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     geometries=True,
                 ).getDownloadUrl()
                 urllib.request.urlretrieve(
-                    csv_url, output_path + "/" + image_name + ".csv"
+                    csv_url, configuration.output_path + "/" + image_name + ".csv"
                 )
 
             image_path = image.getDownloadUrl(
@@ -150,7 +277,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                 }
             )
             urllib.request.urlretrieve(
-                image_path, output_path + "/" + image_name + ".tif"
+                image_path, configuration.output_path + "/" + image_name + ".tif"
             )
 
             # task = ee.batch.Export.image.toDrive(
@@ -168,6 +295,14 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
             # logging.info("Exporting image {} to {}".format(image_name, output_path))
             logger.info(f"Exporting image {image_name} to Local Drive")
     return sentinel1
+
+
+def load_data_collection(input_collections_file: str, config: SimpleNamespace):
+    ee.Initialize()
+    with open(input_collections_file, "r") as f:
+        geometries = geojson.load(f)
+    for geometry in geometries["geometries"]:
+        sentinel1 = preprocess_sentinel_1(geometry=geometry, config=config)
 
 
 def load_data(input_parameters: str, config: SimpleNamespace):
