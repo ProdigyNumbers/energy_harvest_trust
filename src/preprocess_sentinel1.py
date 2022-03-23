@@ -215,11 +215,9 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
         .filter(ee.Filter.eq("resolution_meters", 10))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))
         .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VV"))
-        .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "HV"))
-        .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "HH"))
         .filterDate(configuration.start_date, configuration.end_date)
         .filterBounds(geometry)
-        .select(["VH", "VV", "HV", "HH"])
+        .select(["VH", "VV"])
     )
 
     # select orbit
