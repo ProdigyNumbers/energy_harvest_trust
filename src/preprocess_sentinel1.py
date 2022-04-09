@@ -176,8 +176,8 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
                     urllib.request.urlretrieve(
                         image_path, os.path.join(configuration.output_path, image_name + ".tif")
                     )
+                    logger.info(f"Exporting image {image_name} to Local Drive")
 
-                logger.info(f"Exporting image {image_name} to Local Drive")
         return sentinel1
 
 
