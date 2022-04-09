@@ -40,4 +40,4 @@ if __name__ == "__main__":
                 logger.info(f"Reading input parameters from file {input_data_dir}")
                 load_data_collection(str(input_data_dir), config)
             else:
-                raise Exception(f"Directory {input_data_dir} does not exist")
+                raise IOError(f"Directory {input_data_dir} does not exist")
