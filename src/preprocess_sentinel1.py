@@ -245,7 +245,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
     if configuration.save_to_drive:
         size = sentinel1.size().getInfo()
         image_list = sentinel1.toList(size)
-        for id in range(0, size):
+        for id in range(size):
             image = image_list.get(id)
             image = ee.Image(image)
             image_name = str(image.id().getInfo())
