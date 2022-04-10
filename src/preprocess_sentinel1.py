@@ -25,7 +25,7 @@
 """
 import json
 import os
-import urllib
+import urllib.request
 from types import SimpleNamespace
 from typing import List
 
@@ -140,7 +140,7 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
         if configuration.save_to_drive:
             size = sentinel1.size().getInfo()
             image_list = sentinel1.toList(size)
-            for id in range(0, size):
+            for id in range(size):
                 image = image_list.get(id)
                 image = ee.Image(image)
                 image_name = str(image.id().getInfo())
@@ -158,7 +158,7 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
                         geometries=True,
                     ).getDownloadUrl()
                     urllib.request.urlretrieve(
-                        csv_url, configuration.output_path + "/" + image_name + ".csv"
+                        csv_url, os.path.join(configuration.output_path, image_name + ".csv")
                     )
 
                 image_path = image.getDownloadUrl(
@@ -167,16 +167,17 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
                         "region": sentinel1.geometry().getInfo(),
                         "crs": "EPSG:4326",
                         "description": description,
-                        "fileFormat": "GeoTIFF",
+                        "format": "GEO_TIFF",
                         "maxPixels": 1e13,
                         "fileNamePrefix": image_name,
                     }
                 )
-                urllib.request.urlretrieve(
-                    image_path, configuration.output_path + "/" + image_name + ".tif"
-                )
+                if not os.path.exists(os.path.join(configuration.output_path, image_name + ".tif")):
+                    urllib.request.urlretrieve(
+                        image_path, os.path.join(configuration.output_path, image_name + ".tif")
+                    )
+                    logger.info(f"Exporting image {image_name} to Local Drive")
 
-                logger.info(f"Exporting image {image_name} to Local Drive")
         return sentinel1
 
 
@@ -244,7 +245,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
     if configuration.save_to_drive:
         size = sentinel1.size().getInfo()
         image_list = sentinel1.toList(size)
-        for id in range(0, size):
+        for id in range(size):
             image = image_list.get(id)
             image = ee.Image(image)
             image_name = str(image.id().getInfo())
