@@ -263,7 +263,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     geometries=True,
                 ).getDownloadUrl()
                 urllib.request.urlretrieve(
-                    csv_url, configuration.output_path + "/" + image_name + ".csv"
+                    os.path.join(csv_url, configuration.output_path, image_name + ".csv")
                 )
 
             image_path = image.getDownloadUrl(
@@ -278,7 +278,7 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                 }
             )
             urllib.request.urlretrieve(
-                image_path, configuration.output_path + "/" + image_name + ".tif"
+                os.path.join(image_path, configuration.output_path, image_name + ".tif")
             )
 
             # task = ee.batch.Export.image.toDrive(
