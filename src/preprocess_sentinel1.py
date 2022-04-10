@@ -31,6 +31,7 @@ from typing import List
 
 import ee
 import geojson
+import geojson.geometry
 
 from src.logger_factory import LoggerFactory
 
@@ -157,9 +158,10 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
                         scale=10,
                         geometries=True,
                     ).getDownloadUrl()
-                    urllib.request.urlretrieve(
-                        csv_url, os.path.join(configuration.output_path, image_name + ".csv")
-                    )
+                    if not os.path.exists(os.path.join(configuration.output_path, image_name + ".csv")):
+                        urllib.request.urlretrieve(
+                            csv_url, os.path.join(configuration.output_path, image_name + ".csv")
+                        )
 
                 image_path = image.getDownloadUrl(
                     {
@@ -262,9 +264,10 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     scale=10,
                     geometries=True,
                 ).getDownloadUrl()
-                urllib.request.urlretrieve(
-                    os.path.join(csv_url, configuration.output_path, image_name + ".csv")
-                )
+                if not (os.path.exists(os.path.join(csv_url, configuration.output_path, image_name + ".csv"))):
+                    urllib.request.urlretrieve(
+                        os.path.join(csv_url, configuration.output_path, image_name + ".csv")
+                    )
 
             image_path = image.getDownloadUrl(
                 {
@@ -272,14 +275,15 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     "region": sentinel1.geometry().getInfo(),
                     "crs": "EPSG:4326",
                     "description": description,
-                    "fileFormat": "GeoTIFF",
+                    "format": "GEO_TIFF",
                     "maxPixels": 1e13,
                     "fileNamePrefix": image_name,
                 }
             )
-            urllib.request.urlretrieve(
-                os.path.join(image_path, configuration.output_path, image_name + ".tif")
-            )
+            if not os.path.exists(os.path.join(image_path, configuration.output_path, image_name + ".tif")):
+                urllib.request.urlretrieve(
+                    os.path.join(image_path, configuration.output_path, image_name + ".tif")
+                )
 
             # task = ee.batch.Export.image.toDrive(
             #     image=image.clip(geometry),
