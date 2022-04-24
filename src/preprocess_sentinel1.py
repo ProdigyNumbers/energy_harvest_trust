@@ -167,10 +167,12 @@ def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config:
                         geometries=True,
                         factor=config.sampling_factor
                     ).getDownloadUrl()
+
                     if not os.path.exists(os.path.join(output_dir, image_name + ".csv")):
                         urllib.request.urlretrieve(
                             csv_url, os.path.join(output_dir, image_name + ".csv")
                         )
+
 
                 image_path = image.getDownloadUrl(
                     {
@@ -183,10 +185,12 @@ def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config:
                         "fileNamePrefix": image_name,
                     }
                 )
+
                 if not os.path.exists(os.path.join(output_dir, image_name + ".tif")):
                     urllib.request.urlretrieve(image_path, os.path.join(output_dir, f'{image_name}.tif'))
 
                 logger.info(f"Exporting image {image_name} to Local Drive")
+
 
         return sentinel1
 
@@ -272,10 +276,12 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     scale=10,
                     geometries=True,
                 ).getDownloadUrl()
+
                 if not (os.path.exists(os.path.join(csv_url, configuration.output_path, image_name + ".csv"))):
                     urllib.request.urlretrieve(
                         os.path.join(csv_url, configuration.output_path, image_name + ".csv")
                     )
+
 
             image_path = image.getDownloadUrl(
                 {
