@@ -31,6 +31,7 @@ from typing import List
 
 import ee
 import geojson
+import geojson.geometry
 
 from src.logger_factory import LoggerFactory
 
@@ -49,6 +50,7 @@ class Configuration:
     save_to_drive: bool
     write_to_csv: bool
     output_path: str
+    sampling_factor: float
 
 
 def create_configuration(config: SimpleNamespace) -> Configuration:
@@ -60,6 +62,7 @@ def create_configuration(config: SimpleNamespace) -> Configuration:
     save_to_drive = config.save_to_drive
     write_to_csv = config.write_to_csv
     output_path = config.output_path
+    sampling_factor = config.sampling_factor
     return Configuration(
         start_date,
         end_date,
@@ -69,6 +72,7 @@ def create_configuration(config: SimpleNamespace) -> Configuration:
         save_to_drive,
         write_to_csv,
         output_path,
+        sampling_factor
     )
 
 
@@ -90,18 +94,23 @@ def validate_configuration(config: Configuration):
     if config.orbit not in orbit_values:
         raise ValueError(f"The orbit must be one of the following: {orbit_values}")
 
+    if config.sampling_factor < 0 or config.sampling_factor > 1:
+        raise ValueError("The sampling factor has to lie between (0,1]")
+
     return config
 
 
-def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleNamespace):
+def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config: SimpleNamespace):
     # create configuration polygons
     configuration: Configuration = create_configuration(config)
     # validate configuration
     configuration = validate_configuration(config=configuration)
+    poly_name = f"Polygon_{index}"
+    output_dir = os.path.join(configuration.output_path, poly_name)
+    os.makedirs(output_dir, exist_ok=True)
 
     if geometry.type == "Polygon":
         polygon = ee.Geometry.Polygon(geometry.coordinates)
-
         # read more about the data collection here
         # https://developers.google.com/earth-engine/tutorials/community/sar-basics
         # get the Sentinel-1 data image collection
@@ -156,11 +165,14 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
                         dropNulls=True,
                         scale=10,
                         geometries=True,
+                        factor=config.sampling_factor
                     ).getDownloadUrl()
-                    urllib.request.urlretrieve(
-                        csv_url,
-                        os.path.join(configuration.output_path, image_name + ".csv"),
-                    )
+
+                    if not os.path.exists(os.path.join(output_dir, image_name + ".csv")):
+                        urllib.request.urlretrieve(
+                            csv_url, os.path.join(output_dir, image_name + ".csv")
+                        )
+
 
                 image_path = image.getDownloadUrl(
                     {
@@ -173,14 +185,12 @@ def preprocess_sentinel_1(geometry: geojson.geometry.Polygon, config: SimpleName
                         "fileNamePrefix": image_name,
                     }
                 )
-                if not os.path.exists(
-                    os.path.join(configuration.output_path, image_name + ".tif")
-                ):
-                    urllib.request.urlretrieve(
-                        image_path,
-                        os.path.join(configuration.output_path, image_name + ".tif"),
-                    )
-                    logger.info(f"Exporting image {image_name} to Local Drive")
+
+                if not os.path.exists(os.path.join(output_dir, image_name + ".tif")):
+                    urllib.request.urlretrieve(image_path, os.path.join(output_dir, f'{image_name}.tif'))
+
+                logger.info(f"Exporting image {image_name} to Local Drive")
+
 
         return sentinel1
 
@@ -266,11 +276,12 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     scale=10,
                     geometries=True,
                 ).getDownloadUrl()
-                urllib.request.urlretrieve(
-                    os.path.join(
-                        csv_url, configuration.output_path, image_name + ".csv"
+
+                if not (os.path.exists(os.path.join(csv_url, configuration.output_path, image_name + ".csv"))):
+                    urllib.request.urlretrieve(
+                        os.path.join(csv_url, configuration.output_path, image_name + ".csv")
                     )
-                )
+
 
             image_path = image.getDownloadUrl(
                 {
@@ -278,14 +289,15 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     "region": sentinel1.geometry().getInfo(),
                     "crs": "EPSG:4326",
                     "description": description,
-                    "fileFormat": "GeoTIFF",
+                    "format": "GEO_TIFF",
                     "maxPixels": 1e13,
                     "fileNamePrefix": image_name,
                 }
             )
-            urllib.request.urlretrieve(
-                os.path.join(image_path, configuration.output_path, image_name + ".tif")
-            )
+            if not os.path.exists(os.path.join(image_path, configuration.output_path, image_name + ".tif")):
+                urllib.request.urlretrieve(
+                    os.path.join(image_path, configuration.output_path, image_name + ".tif")
+                )
 
             # task = ee.batch.Export.image.toDrive(
             #     image=image.clip(geometry),
@@ -308,8 +320,8 @@ def load_data_collection(input_collections_file: str, config: SimpleNamespace):
     ee.Initialize()
     with open(input_collections_file, "r") as f:
         geometries = geojson.load(f)
-    for geometry in geometries["geometries"]:
-        sentinel1 = preprocess_sentinel_1(geometry=geometry, config=config)
+    for index, geometry in enumerate(geometries["geometries"]):
+        sentinel1 = preprocess_sentinel_1(index, geometry=geometry, config=config)
 
 
 def load_data(input_parameters: str, config: SimpleNamespace):

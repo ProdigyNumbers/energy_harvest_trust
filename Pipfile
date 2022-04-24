@@ -21,6 +21,8 @@ argparse = "*"
 osmnx = "*"
 pyrosm = "*"
 geojson = "*"
+pygdal = "==3.2.2.10"
+rastertodataframe = "*"
 
 [dev-packages]
 black = "*"
