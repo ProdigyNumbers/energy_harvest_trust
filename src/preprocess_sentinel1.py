@@ -25,6 +25,7 @@
 """
 import json
 import os
+import urllib.error
 import urllib.request
 from types import SimpleNamespace
 from typing import List
@@ -169,9 +170,12 @@ def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config:
                     ).getDownloadUrl()
 
                     if not os.path.exists(os.path.join(output_dir, image_name + ".csv")):
-                        urllib.request.urlretrieve(
-                            csv_url, os.path.join(output_dir, image_name + ".csv")
-                        )
+                        try:
+                            urllib.request.urlretrieve(
+                                csv_url, os.path.join(output_dir, image_name + ".csv")
+                            )
+                        except urllib.error.HTTPError:
+                            pass
 
 
                 image_path = image.getDownloadUrl(
@@ -187,10 +191,11 @@ def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config:
                 )
 
                 if not os.path.exists(os.path.join(output_dir, image_name + ".tif")):
-                    urllib.request.urlretrieve(image_path, os.path.join(output_dir, f'{image_name}.tif'))
-
+                    try:
+                        urllib.request.urlretrieve(image_path, os.path.join(output_dir, f'{image_name}.tif'))
+                    except urllib.error.HTTPError:
+                        pass
                 logger.info(f"Exporting image {image_name} to Local Drive")
-
 
         return sentinel1
 
@@ -278,10 +283,13 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                 ).getDownloadUrl()
 
                 if not (os.path.exists(os.path.join(csv_url, configuration.output_path, image_name + ".csv"))):
-                    urllib.request.urlretrieve(
-                        os.path.join(csv_url, configuration.output_path, image_name + ".csv")
-                    )
-
+                    
+                    try:
+                        urllib.request.urlretrieve(
+                            os.path.join(csv_url, configuration.output_path, image_name + ".csv")
+                        )
+                    except urllib.error.HTTPError:
+                        pass
 
             image_path = image.getDownloadUrl(
                 {
@@ -295,9 +303,12 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                 }
             )
             if not os.path.exists(os.path.join(image_path, configuration.output_path, image_name + ".tif")):
-                urllib.request.urlretrieve(
-                    os.path.join(image_path, configuration.output_path, image_name + ".tif")
-                )
+                try:
+                    urllib.request.urlretrieve(
+                        os.path.join(image_path, configuration.output_path, image_name + ".tif")
+                    )
+                except urllib.error.HTTPError:
+                    pass
 
             # task = ee.batch.Export.image.toDrive(
             #     image=image.clip(geometry),
