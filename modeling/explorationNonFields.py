@@ -8,5 +8,9 @@ only_field = pd.read_csv("../data/output_clean/only_fields.csv")
 # %%
 non_field.day.unique()
 # %%
-non_field.month.unique()
+only_field.month.unique()
+# %%
+full = pd.concat([non_field, only_field])
+# %%
+full.groupby("label").mean()
 # %%
