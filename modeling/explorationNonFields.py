@@ -175,7 +175,7 @@ for val in vals:
 
 # %%
 plt.figure()
-plt.title("Precision and Recall at different VH values for 7 Month")
+plt.title("Precision and Recall at different VH values for 7 Month Field/Non Field")
 plt.plot(list(vals), prec, label="Precision")
 plt.plot(list(vals), rec, label="Recall")
 plt.plot(list(vals), aucs, label="AUC")
