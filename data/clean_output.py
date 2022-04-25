@@ -57,7 +57,7 @@ for field in only_fields:
             df["year"] = year
             df["month"] = month
             df["day"] = day
-            df["label"] = "non_field"
+            df["label"] = "only_field"
             df["counter"] = counter
             df = df.drop(columns=["system:index", ".geo"])
             data = data.append(df)
