@@ -189,3 +189,8 @@ plt.show()
 # %%
 data[data.VH < val].shape[0]
 # %%
+only_field[(only_field.month == 2) & (only_field.day == 10)].shape
+# %%
+non_field[(non_field.month == 2) & (non_field.day == 10)].shape
+
+# %%
