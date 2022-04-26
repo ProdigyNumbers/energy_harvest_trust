@@ -44,9 +44,9 @@ only_field["date"] = pd.to_datetime(only_field["date"])
 df = pd.concat([non_field, only_field])
 # %%
 plt.figure()
-plt.title("Yearly horizontal backscatter evolution of fields and non-fields")
-plt.plot(only_field.groupby("date")["VH"].mean(), label="Fields", color="r")
-plt.plot(non_field.groupby("date")["VH"].mean(), label="Non Fields", color="b")
+plt.title("Yearly vertical backscatter evolution of fields and non-fields")
+plt.plot(only_field.groupby("date")["VV"].mean(), label="Fields", color="r")
+plt.plot(non_field.groupby("date")["VV"].mean(), label="Non Fields", color="b")
 plt.xticks(rotation=45)
 plt.ylabel("VH Backscatter")
 plt.legend()
@@ -155,15 +155,15 @@ tp / (tp + 0.5 * (fp + fn))
 
 # %%
 data = df[df["month"] == 7]
-data = data.sort_values("VH")
-vals = set([int(i) for i in data["VH"].values])
+data = data.sort_values("VV")
+vals = set([int(i) for i in data["VV"].values])
 # %%
 prec = []
 rec = []
 aucs = []
 perc = []
 for val in vals:
-    preds = np.where(data.VH < val, 1, 0)
+    preds = np.where(data.VV < val, 1, 0)
     tn, fp, fn, tp = confusion_matrix(data["label"].values, preds).ravel()
     precision = tp / (tp + fp)
     recall = tp / (tp + fn)
@@ -171,21 +171,20 @@ for val in vals:
     prec.append(precision)
     rec.append(recall)
 
-    perc.append(data[data.VH < val].shape[0] / data.shape[0])
+    perc.append(data[data.VV < val].shape[0] / data.shape[0])
 
 # %%
 plt.figure()
 plt.title("Precision and Recall at different VH values for 7 Month Field/Non Field")
-plt.plot(list(vals), prec, label="Precision")
-plt.plot(list(vals), rec, label="Recall")
-plt.plot(list(vals), aucs, label="AUC")
-plt.plot(list(vals), perc, label="Percentage of data points")
+plt.plot(sorted(list(vals)), prec, label="Precision")
+plt.plot(sorted(list(vals)), rec, label="Recall")
+plt.plot(sorted(list(vals)), aucs, label="AUC")
+plt.plot(sorted(list(vals)), perc, label="Percentage of data points")
 plt.xlabel("VH Index")
 plt.ylabel("Precision|Recall")
 plt.legend()
 plt.savefig("images/precisionRecallvariationNonField.png")
 plt.show()
-
 # %%
 data[data.VH < val].shape[0]
 # %%
