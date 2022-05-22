@@ -145,4 +145,7 @@ typings/
 # Ignore output directory
 data/output
 data/osm
+data/gdrive
+data/input/gdrive
 *.csv
+credentials.json
