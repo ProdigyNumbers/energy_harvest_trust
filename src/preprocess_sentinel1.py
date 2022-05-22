@@ -23,6 +23,8 @@
         An ee.ImageCollection with an analysis ready Sentinel 1 imagery with the specified
         polarization images and angle band.
 """
+
+import contextlib
 import json
 import os
 import urllib.error
@@ -133,8 +135,8 @@ def preprocess_sentinel_1(
             )
 
         # select polarization
-        if configuration.polarization_list != [""]:
-            sentinel1 = sentinel1.select(configuration.polarization_list)
+        # if configuration.polarization_list != [""]:
+        #     sentinel1 = sentinel1.select(configuration.polarization_list)
         # if configuration.polarization == "VV":
         #     sentinel1 = sentinel1.select(["VV"])
         # elif configuration.polarization == "VH":
@@ -172,14 +174,12 @@ def preprocess_sentinel_1(
                     ).getDownloadUrl()
 
                     if not os.path.exists(
-                        os.path.join(output_dir, image_name + ".csv")
+                        os.path.join(output_dir, f"{image_name}.csv")
                     ):
-                        try:
+                        with contextlib.suppress(urllib.error.HTTPError):
                             urllib.request.urlretrieve(
-                                csv_url, os.path.join(output_dir, image_name + ".csv")
+                                csv_url, os.path.join(output_dir, f"{image_name}.csv")
                             )
-                        except urllib.error.HTTPError:
-                            pass
 
                 image_path = image.getDownloadUrl(
                     {
@@ -193,13 +193,11 @@ def preprocess_sentinel_1(
                     }
                 )
 
-                if not os.path.exists(os.path.join(output_dir, image_name + ".tif")):
-                    try:
+                if not os.path.exists(os.path.join(output_dir, f"{image_name}.tif")):
+                    with contextlib.suppress(urllib.error.HTTPError):
                         urllib.request.urlretrieve(
                             image_path, os.path.join(output_dir, f"{image_name}.tif")
                         )
-                    except urllib.error.HTTPError:
-                        pass
                 logger.info(f"Exporting image {image_name} to Local Drive")
 
         return sentinel1
@@ -252,8 +250,8 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
         )
 
     # select polarization
-    if configuration.polarization_list != [""]:
-        sentinel1 = sentinel1.select(configuration.polarization_list)
+    # if configuration.polarization_list != [""]:
+    #     sentinel1 = sentinel1.select(configuration.polarization_list)
     # if configuration.polarization == "VV":
     #     sentinel1 = sentinel1.select(["VV"])
     # elif configuration.polarization == "VH":
@@ -287,22 +285,18 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     geometries=True,
                 ).getDownloadUrl()
 
-                if not (
-                    os.path.exists(
-                        os.path.join(
-                            csv_url, configuration.output_path, image_name + ".csv"
-                        )
+                if not os.path.exists(
+                    os.path.join(
+                        csv_url, configuration.output_path, f"{image_name}.csv"
                     )
                 ):
 
-                    try:
+                    with contextlib.suppress(urllib.error.HTTPError):
                         urllib.request.urlretrieve(
                             os.path.join(
-                                csv_url, configuration.output_path, image_name + ".csv"
+                                csv_url, configuration.output_path, f"{image_name}.csv"
                             )
                         )
-                    except urllib.error.HTTPError:
-                        pass
 
             image_path = image.getDownloadUrl(
                 {
@@ -316,16 +310,14 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                 }
             )
             if not os.path.exists(
-                os.path.join(image_path, configuration.output_path, image_name + ".tif")
+                os.path.join(image_path, configuration.output_path, f"{image_name}.tif")
             ):
-                try:
+                with contextlib.suppress(urllib.error.HTTPError):
                     urllib.request.urlretrieve(
                         os.path.join(
-                            image_path, configuration.output_path, image_name + ".tif"
+                            image_path, configuration.output_path, f"{image_name}.tif"
                         )
                     )
-                except urllib.error.HTTPError:
-                    pass
 
             # task = ee.batch.Export.image.toDrive(
             #     image=image.clip(geometry),
