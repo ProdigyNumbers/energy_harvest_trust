@@ -21,20 +21,15 @@ argparse = "*"
 osmnx = "*"
 pyrosm = "*"
 geojson = "*"
-pygdal = "==3.2.2.10"
+pygdal = "==3.4.1.10"
 rastertodataframe = "*"
+google-api-python-client = "*"
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
 
 [dev-packages]
 black = "*"
-coverage = "*"
-nose = "*"
-pluggy = "*"
-ipython = "*"
 flake8 = "*"
-isort = "*"
 
 [requires]
-python_version = "3.9"
-
-[pipenv]
-allow_prereleases = true
+python_version = "3.10"
