@@ -73,7 +73,7 @@ def create_configuration(config: SimpleNamespace) -> Configuration:
         save_to_drive,
         write_to_csv,
         output_path,
-        sampling_factor
+        sampling_factor,
     )
 
 
@@ -101,7 +101,9 @@ def validate_configuration(config: Configuration):
     return config
 
 
-def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config: SimpleNamespace):
+def preprocess_sentinel_1(
+    index: int, geometry: geojson.geometry.Polygon, config: SimpleNamespace
+):
     # create configuration polygons
     configuration: Configuration = create_configuration(config)
     # validate configuration
@@ -166,17 +168,18 @@ def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config:
                         dropNulls=True,
                         scale=10,
                         geometries=True,
-                        factor=config.sampling_factor
+                        factor=config.sampling_factor,
                     ).getDownloadUrl()
 
-                    if not os.path.exists(os.path.join(output_dir, image_name + ".csv")):
+                    if not os.path.exists(
+                        os.path.join(output_dir, image_name + ".csv")
+                    ):
                         try:
                             urllib.request.urlretrieve(
                                 csv_url, os.path.join(output_dir, image_name + ".csv")
                             )
                         except urllib.error.HTTPError:
                             pass
-
 
                 image_path = image.getDownloadUrl(
                     {
@@ -192,7 +195,9 @@ def preprocess_sentinel_1(index:int, geometry: geojson.geometry.Polygon, config:
 
                 if not os.path.exists(os.path.join(output_dir, image_name + ".tif")):
                     try:
-                        urllib.request.urlretrieve(image_path, os.path.join(output_dir, f'{image_name}.tif'))
+                        urllib.request.urlretrieve(
+                            image_path, os.path.join(output_dir, f"{image_name}.tif")
+                        )
                     except urllib.error.HTTPError:
                         pass
                 logger.info(f"Exporting image {image_name} to Local Drive")
@@ -282,11 +287,19 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     geometries=True,
                 ).getDownloadUrl()
 
-                if not (os.path.exists(os.path.join(csv_url, configuration.output_path, image_name + ".csv"))):
-                    
+                if not (
+                    os.path.exists(
+                        os.path.join(
+                            csv_url, configuration.output_path, image_name + ".csv"
+                        )
+                    )
+                ):
+
                     try:
                         urllib.request.urlretrieve(
-                            os.path.join(csv_url, configuration.output_path, image_name + ".csv")
+                            os.path.join(
+                                csv_url, configuration.output_path, image_name + ".csv"
+                            )
                         )
                     except urllib.error.HTTPError:
                         pass
@@ -302,10 +315,14 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     "fileNamePrefix": image_name,
                 }
             )
-            if not os.path.exists(os.path.join(image_path, configuration.output_path, image_name + ".tif")):
+            if not os.path.exists(
+                os.path.join(image_path, configuration.output_path, image_name + ".tif")
+            ):
                 try:
                     urllib.request.urlretrieve(
-                        os.path.join(image_path, configuration.output_path, image_name + ".tif")
+                        os.path.join(
+                            image_path, configuration.output_path, image_name + ".tif"
+                        )
                     )
                 except urllib.error.HTTPError:
                     pass

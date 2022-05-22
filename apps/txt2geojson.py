@@ -10,18 +10,22 @@ from src.logger_factory import LoggerFactory
 
 logger = LoggerFactory("txt2geojson").get_logger()
 
-def get_all_txt_files(input_data_dir: str) -> List[pathlib.Path]:
-    return list(Path(input_data_dir).rglob('*.txt'))
 
-def write_text_to_geojson(list_of_txt_files: List[pathlib.Path], output_dir: str, output_filename: str):
+def get_all_txt_files(input_data_dir: str) -> List[pathlib.Path]:
+    return list(Path(input_data_dir).rglob("*.txt"))
+
+
+def write_text_to_geojson(
+    list_of_txt_files: List[pathlib.Path], output_dir: str, output_filename: str
+):
     polygons = []
     for file in list_of_txt_files:
         poly_list: List[Tuple] = []
-        with open(file, 'r') as io:
+        with open(file, "r") as io:
             data = json.load(io)
         for elem in data:
-            lat = elem['latitude']
-            lon = elem['longitude']
+            lat = elem["latitude"]
+            lon = elem["longitude"]
             poly_list.append((lat, lon))
         polygon = geojson.Polygon([poly_list])
         polygons.append(polygon)
@@ -37,11 +41,25 @@ def write_text_to_geojson(list_of_txt_files: List[pathlib.Path], output_dir: str
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser("Retrieve all txt files from a folder and convert them in a  \
-                geojson file of a geometry collection.")
-    parser.add_argument("--input_data_dir", type=str, help="Directory containing input data as text files.")
-    parser.add_argument("--output_dir", type=str, help="Directory to which the geojson file will be written to.")
-    parser.add_argument("--output_filename", type=str, help="Name of geojson file to which output will be written to.")
+    parser = argparse.ArgumentParser(
+        "Retrieve all txt files from a folder and convert them in a  \
+                geojson file of a geometry collection."
+    )
+    parser.add_argument(
+        "--input_data_dir",
+        type=str,
+        help="Directory containing input data as text files.",
+    )
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        help="Directory to which the geojson file will be written to.",
+    )
+    parser.add_argument(
+        "--output_filename",
+        type=str,
+        help="Name of geojson file to which output will be written to.",
+    )
     args = parser.parse_args()
 
     if args.input_data_dir is not None:
