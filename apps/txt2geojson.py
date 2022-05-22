@@ -23,8 +23,8 @@ def write_text_to_geojson(
         poly_list: List[Tuple] = []
         with open(file, "r") as io:
             data = json.load(io)
-        first_lat = data[0]['latitude']
-        first_lon = data[0]['longitude']
+        first_lat = data[0]["latitude"]
+        first_lon = data[0]["longitude"]
         for elem in data:
             lat = elem["latitude"]
             lon = elem["longitude"]

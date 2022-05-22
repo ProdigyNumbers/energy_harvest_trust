@@ -173,9 +173,13 @@ def preprocess_sentinel_1(
                         factor=config.sampling_factor,
                     ).getDownloadUrl()
 
-                    if not os.path.exists(os.path.join(output_dir, f"{image_name}.csv")):
+                    if not os.path.exists(
+                        os.path.join(output_dir, f"{image_name}.csv")
+                    ):
                         with contextlib.suppress(urllib.error.HTTPError):
-                            urllib.request.urlretrieve(csv_url, os.path.join(output_dir, f"{image_name}.csv"))
+                            urllib.request.urlretrieve(
+                                csv_url, os.path.join(output_dir, f"{image_name}.csv")
+                            )
 
                 image_path = image.getDownloadUrl(
                     {
@@ -281,10 +285,18 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     geometries=True,
                 ).getDownloadUrl()
 
-                if not os.path.exists(os.path.join(csv_url, configuration.output_path, f"{image_name}.csv")):
+                if not os.path.exists(
+                    os.path.join(
+                        csv_url, configuration.output_path, f"{image_name}.csv"
+                    )
+                ):
 
                     with contextlib.suppress(urllib.error.HTTPError):
-                        urllib.request.urlretrieve(os.path.join(csv_url, configuration.output_path, f"{image_name}.csv"))
+                        urllib.request.urlretrieve(
+                            os.path.join(
+                                csv_url, configuration.output_path, f"{image_name}.csv"
+                            )
+                        )
 
             image_path = image.getDownloadUrl(
                 {
@@ -297,9 +309,15 @@ def preprocess_sentinel1(parameters: SimpleNamespace, config: SimpleNamespace):
                     "fileNamePrefix": image_name,
                 }
             )
-            if not os.path.exists(os.path.join(image_path, configuration.output_path, f"{image_name}.tif")):
+            if not os.path.exists(
+                os.path.join(image_path, configuration.output_path, f"{image_name}.tif")
+            ):
                 with contextlib.suppress(urllib.error.HTTPError):
-                    urllib.request.urlretrieve(os.path.join(image_path, configuration.output_path, f"{image_name}.tif"))
+                    urllib.request.urlretrieve(
+                        os.path.join(
+                            image_path, configuration.output_path, f"{image_name}.tif"
+                        )
+                    )
 
             # task = ee.batch.Export.image.toDrive(
             #     image=image.clip(geometry),
