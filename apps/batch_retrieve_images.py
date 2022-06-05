@@ -1,6 +1,9 @@
 import argparse
 import os
 from pathlib import Path
+import sys
+
+sys.path.append('.')
 
 from src.logger_factory import LoggerFactory
 from src.preprocess_sentinel1 import load_config, load_data_collection
