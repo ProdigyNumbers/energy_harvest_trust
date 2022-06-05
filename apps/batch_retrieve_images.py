@@ -41,10 +41,10 @@ if __name__ == "__main__":
             input_data_dir = Path(input_data_dir)
             if input_data_dir.is_file():
                 logger.info(f"Reading input parameters from file {input_data_dir}")
-                print(str(input_data_dir))
-                print('-----------')
-                print(config)
-                print('***********+')
+                #print(str(input_data_dir))
+                #print('-----------')
+                #print(config)
+                #print('***********+')
                 load_data_collection(str(input_data_dir), config)
             else:
                 raise IOError(f"Directory {input_data_dir} does not exist")
