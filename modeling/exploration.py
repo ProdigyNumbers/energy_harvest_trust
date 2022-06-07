@@ -46,7 +46,9 @@ sns.kdeplot(e)
 
 # %%
 plt.figure()
-plt.title("Yearly horizontal backscatter evolution of fields with paddy, cotton and non-field")
+plt.title(
+    "Yearly horizontal backscatter evolution of fields with paddy, cotton and non-field"
+)
 plt.plot(paddy.groupby("month")["VH"].mean(), label="Paddy")
 plt.plot(non.groupby("month")["VH"].mean(), label="Non Fields")
 plt.plot(cotton.groupby("month")["VH"].mean(), label="Cotton")
@@ -59,7 +61,7 @@ plt.figure()
 plt.title("Yearly horizontal backscatter evolution of fields with paddy and non-paddy")
 plt.plot(paddy.groupby("month")["VV"].mean(), label="Paddy")
 plt.plot(non.groupby("month")["VV"].mean(), label="Non Fields")
-#plt.plot(cotton.groupby("month")["VV"].mean(), label="Cotton")
+# plt.plot(cotton.groupby("month")["VV"].mean(), label="Cotton")
 plt.legend()
 plt.savefig("modeling/images/yearlyVV.png")
 plt.show()

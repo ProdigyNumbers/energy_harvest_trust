@@ -4,6 +4,9 @@ import os
 import pathlib
 from pathlib import Path
 from typing import List, Tuple
+import sys
+
+sys.path.append(".")
 
 import geojson
 from src.logger_factory import LoggerFactory
