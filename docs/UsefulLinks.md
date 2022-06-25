@@ -6,3 +6,5 @@
 - [Object-Based Greenhouse Horticultural Crop Identification from Multi-Temporal Satellite Imagery: A Case Study in Almeria, Spain](https://www.mdpi.com/2072-4292/7/6/7378)
 - [Nature:High resolution paddy rice maps in cloud-prone Bangladesh and Northeast India using Sentinel-1 data](https://www.nature.com/articles/s41597-019-0036-3)
 - [Crop classification from Sentinel-2-derived vegetation indices using ensemble learning](https://www.spiedigitallibrary.org/journals/journal-of-applied-remote-sensing/volume-12/issue-02/026019/Crop-classification-from-Sentinel-2-derived-vegetation-indices-using-ensemble/10.1117/1.JRS.12.026019.full?SSO=1)
+- VH index of maze vs cotton https://www.researchgate.net/figure/Temporal-VH-backscatter-profiles-of-maize-and-cotton-crops-grown-in-Siddipet-district-3_fig2_357556187
+- Analyzing Temporal and Spatial Characteristics of Crop Parameters Using Sentinel-1 Backscatter Data https://www.mdpi.com/2072-4292/11/13/1569/htm
