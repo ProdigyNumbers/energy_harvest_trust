@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "energy-harvest-trust"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "energy_harvest_trust"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+certifi = "^2022.9.24"
+six = "^1.16.0"
+python-dateutil = "^2.8.2"
+urllib3 = "^1.26.12"
+py = "^1.11.0"
+randomize = "^0.14"
+geopandas = "^0.11.1"
+earthengine-api = "^0.1.326"
+matplotlib = "^3.6.0"
+google-api-python-client = "1.12.11"
+GDAL = "3.4.1"
+rastertodataframe = "^0.2.1"
+osmnx = "^1.2.2"
+geojson = "^2.5.0"
+argparse = "^1.4.0"
+folium = "^0.12.1.post1"
+geemap = "^0.17.1"
+python-dotenv = "^0.21.0"
+google-auth-httplib2 = "^0.1.0"
+google-auth-oauthlib = "^0.5.3"
+
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.5.0"
+black = "^22.8.0"
+flake8 = "^5.0.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
