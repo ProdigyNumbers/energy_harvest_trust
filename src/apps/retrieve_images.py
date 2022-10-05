@@ -12,7 +12,8 @@ Command line interface for retrieving Sentinel-1 images and saving them to Googl
 Before running this script, you need to have a Google account and a Google Drive account.
 Followed by the following steps:
 `$ earthengine authenticate`
-`$ poetry run python apps/retrieve_images.py --input_poly_file ./data/input/paddy/polygons/polygon0.json --config ./data/input/config/config.json`
+`$ poetry run python apps/retrieve_images.py --input_poly_file ./data/input/paddy/polygons/polygon0.json
+        --config ./data/input/config/config.json`
 """
 
 parser = argparse.ArgumentParser(description="Retrieve images given a json file")
