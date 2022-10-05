@@ -6,8 +6,6 @@ import sys
 from pathlib import Path
 from typing import List, Tuple
 
-sys.path.append(".")
-
 import geojson
 from src.lib.logger_factory import LoggerFactory
 
