@@ -1,8 +1,5 @@
-import swagger_client
 from swagger_client.api.default_api import DefaultApi
-from swagger_client.models import CategoryResponse
-
-import json
+from swagger_client.models.category_response import CategoryResponse
 
 
 def main():
@@ -29,7 +26,7 @@ def main():
         start="2020-01-01",
         end="2020-12-31",
         bbox="74.919357,32.026057,76.196246,29.869031",
-    )
+    )  # type: ignore
     print(event_response._events)
 
 

@@ -1,15 +1,10 @@
 import argparse
 from pathlib import Path
 
-from src.logger_factory import LoggerFactory
-
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from src.preprocess_sentinel1 import load_config, load_data
+from src.lib.logger_factory import LoggerFactory
+from src.lib.preprocess_sentinel1 import load_config, load_data
 
 logger = LoggerFactory("retrieve_images").get_logger()
-
-
-# import sys
 
 
 """
@@ -17,7 +12,7 @@ Command line interface for retrieving Sentinel-1 images and saving them to Googl
 Before running this script, you need to have a Google account and a Google Drive account.
 Followed by the following steps:
 `$ earthengine authenticate`
-`$ python apps/retrieve_images.py --input_poly_file ./data/input/paddy/polygons/polygon0.json --config ./data/input/config/config.json`
+`$ poetry run python apps/retrieve_images.py --input_poly_file ./data/input/paddy/polygons/polygon0.json --config ./data/input/config/config.json`
 """
 
 parser = argparse.ArgumentParser(description="Retrieve images given a json file")
@@ -41,7 +36,7 @@ if args.config is not None:
             logger.info(f"Reading input parameters from {input_poly_file}")
             load_data(str(input_poly_file), config)
         else:
-            raise Exception(f"File {input_poly_file} does not exist")
+            raise IOError(f"File {input_poly_file} does not exist")
 
 # # Check if the file exists
 # if os.path.exists(args.input_poly_file):

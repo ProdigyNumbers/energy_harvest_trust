@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
-from src.logger_factory import LoggerFactory
+from src.lib.logger_factory import LoggerFactory
 
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
@@ -139,7 +139,7 @@ def download_file(service, file_id, location, filename):
             sys.exit(1)
         print(f"\rDownload {int(status.progress() * 100)}%.", end="")
         sys.stdout.flush()
-    print("")
+    print()
 
 
 if __name__ == "__main__":
