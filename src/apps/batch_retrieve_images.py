@@ -1,12 +1,12 @@
 import argparse
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 sys.path.append(".")
 
-from src.logger_factory import LoggerFactory
-from src.preprocess_sentinel1 import load_config, load_data_collection
+from src.lib.logger_factory import LoggerFactory
+from src.lib.preprocess_sentinel1 import load_config, load_data_collection
 
 logger = LoggerFactory("batch_retrieve_images").get_logger()
 

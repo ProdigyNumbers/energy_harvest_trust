@@ -2,14 +2,14 @@ import argparse
 import json
 import os
 import pathlib
+import sys
 from pathlib import Path
 from typing import List, Tuple
-import sys
 
 sys.path.append(".")
 
 import geojson
-from src.logger_factory import LoggerFactory
+from src.lib.logger_factory import LoggerFactory
 
 logger = LoggerFactory("txt2geojson").get_logger()
 
@@ -28,10 +28,7 @@ def write_text_to_geojson(
             data = json.load(io)
         first_lat = data[0]["latitude"]
         first_lon = data[0]["longitude"]
-        for elem in data:
-            lat = elem["latitude"]
-            lon = elem["longitude"]
-            poly_list.append((lat, lon))
+        poly_list.extend((elem["latitude"], elem["longitude"]) for elem in data)
         poly_list.append((first_lat, first_lon))
         polygon = geojson.Polygon([poly_list])
         polygons.append(polygon)
