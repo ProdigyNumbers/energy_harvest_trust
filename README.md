@@ -17,6 +17,9 @@ This project is aimed at reducing crop burning and air pollution by:
 2. Intervening: by creating a marketplace for crop residue and connecting farmers, collectors and buyers of crop residue to provide better alternatives and reduce burning
 3. Doing Policy advocacy: inform the government about areas where crop waste is getting burned and also, do advocacy for policy changes required for utilization of crop waste
 
+## Report
+Current project report is available [here](report.pdf)
+
 ## Components
 ### Detect Fires
 #### Data Sources Considered
