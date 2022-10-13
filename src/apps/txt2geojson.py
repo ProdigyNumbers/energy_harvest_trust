@@ -1,13 +1,11 @@
 import argparse
 import json
-import os
 import pathlib
-import sys
 from pathlib import Path
 from typing import List, Tuple
 
 import geojson
-from src.lib.logger_factory import LoggerFactory
+from src.lib.common.logger_factory import LoggerFactory
 
 logger = LoggerFactory("txt2geojson").get_logger()
 

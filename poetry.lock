@@ -1523,6 +1523,17 @@ pytz = ">=2020.1"
 test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
+name = "pandas-stubs"
+version = "1.5.0.221012"
+description = "Type annotations for pandas"
+category = "dev"
+optional = false
+python-versions = ">=3.8,<3.11"
+
+[package.dependencies]
+types-pytz = ">=2022.1.1"
+
+[[package]]
 name = "pandocfilters"
 version = "1.5.0"
 description = "Utilities for writing pandoc filters in python"
@@ -2282,6 +2293,14 @@ traitlets = ">=4.2.2"
 test = ["numpy", "pandas", "pytest", "xarray"]
 
 [[package]]
+name = "types-pytz"
+version = "2022.4.0.0"
+description = "Typing stubs for pytz"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "types-six"
 version = "1.16.21"
 description = "Typing stubs for six"
@@ -2390,8 +2409,8 @@ python-versions = ">=3.7"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
-content-hash = "f22b440016d8c2c7305bd4389b63baabc0607aa4dc1cf706264cde0733649d8a"
+python-versions = ">=3.10,<3.11"
+content-hash = "a03cf228eb0f9bad09586ca9dbd8b30f8aa0fa35f7885d488eac1a0d3597a1ea"
 
 [metadata.files]
 affine = [
@@ -3352,6 +3371,10 @@ pandas = [
     {file = "pandas-1.5.0-cp39-cp39-win_amd64.whl", hash = "sha256:8a4fc04838615bf0a8d3a03ed68197f358054f0df61f390bcc64fbe39e3d71ec"},
     {file = "pandas-1.5.0.tar.gz", hash = "sha256:3ee61b881d2f64dd90c356eb4a4a4de75376586cd3c9341c6c0fcaae18d52977"},
 ]
+pandas-stubs = [
+    {file = "pandas-stubs-1.5.0.221012.tar.gz", hash = "sha256:e8e7b03e2def55519b0c3c90d92703feccb9717044bb1de8d5f178bc56acb34b"},
+    {file = "pandas_stubs-1.5.0.221012-py3-none-any.whl", hash = "sha256:642d8c60da07aa2cd2b3f61becda571b343eae7120a85460a6d0e4f0825379b1"},
+]
 pandocfilters = [
     {file = "pandocfilters-1.5.0-py2.py3-none-any.whl", hash = "sha256:33aae3f25fd1a026079f5d27bdd52496f0e0803b3469282162bafdcbdf6ef14f"},
     {file = "pandocfilters-1.5.0.tar.gz", hash = "sha256:0b679503337d233b4339a817bfc8c50064e2eff681314376a47cb582305a7a38"},
@@ -3993,6 +4016,10 @@ traitlets = [
 traittypes = [
     {file = "traittypes-0.2.1-py2.py3-none-any.whl", hash = "sha256:1340af133810b6eee1a2eb2e988f862b0d12b6c2d16f282aaf3207b782134c2e"},
     {file = "traittypes-0.2.1.tar.gz", hash = "sha256:be6fa26294733e7489822ded4ae25da5b4824a8a7a0e0c2dccfde596e3489bd6"},
+]
+types-pytz = [
+    {file = "types-pytz-2022.4.0.0.tar.gz", hash = "sha256:17d66e4b16e80ceae0787726f3a22288df7d3f9fdebeb091dc64b92c0e4ea09d"},
+    {file = "types_pytz-2022.4.0.0-py3-none-any.whl", hash = "sha256:950b0f3d64ed5b03a3e29c1e38fe2be8371c933c8e97922d0352345336eb8af4"},
 ]
 types-six = [
     {file = "types-six-1.16.21.tar.gz", hash = "sha256:562b036de1a837eafe164827c5c53d7a8d703a44bb211642932dcd59e9e0f7c9"},

@@ -1,7 +1,4 @@
-from black import out
 import ee
-from matplotlib import units
-import math
 
 
 class SpeckleFilter:
@@ -14,7 +11,7 @@ class SpeckleFilter:
         Apply boxcar filter to image to reduce any measurement noise.
         """
         band_names = self.image.bandNames().remove("angle")
-        kernel = ee.Kernel.square(
+        kernel = ee.Kernel.square(  # type: ignore
             (self.kernel_size / 2), units="pixels", normalize=True
         )
         filter_image = self.image.select(band_names).convolve(kernel).rename(band_names)

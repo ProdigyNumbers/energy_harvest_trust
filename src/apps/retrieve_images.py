@@ -1,8 +1,8 @@
 import argparse
 from pathlib import Path
 
-from src.lib.logger_factory import LoggerFactory
-from src.lib.preprocess_sentinel1 import load_config, load_data
+from src.lib.common.logger_factory import LoggerFactory
+from src.lib.common.preprocess_sentinel1 import load_config, load_data
 
 logger = LoggerFactory("retrieve_images").get_logger()
 

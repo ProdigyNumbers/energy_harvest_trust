@@ -1,5 +1,6 @@
+from typing import List, Tuple
+
 import geopandas as gpd
-from typing import Tuple, List
 
 Extents = Tuple[float, float, float, float]
 Point2D = Tuple[float, float]
@@ -7,8 +8,8 @@ BoundingBox = Tuple[Point2D, Point2D, Point2D, Point2D]
 
 
 def extract_state_dataframe(
-    countryGDF: gpd.geodataframe.GeoDataFrame, state_name: str
-) -> gpd.geodataframe.GeoDataFrame:
+    countryGDF: gpd.geodataframe.GeoDataFrame, state_name: str  # type: ignore
+) -> gpd.geodataframe.GeoDataFrame:  # type: ignore
     """Extracts the geodataframe for a given state from the gadm level 1 shapefile of a country
 
     Args:
@@ -18,7 +19,7 @@ def extract_state_dataframe(
     Returns:
         gpd.geodataframe.GeoDataFrame: GeoDataFrame of the state as extracted from countryGDF
     """
-    state_gdf: gpd.geodataframe.GeoDataFrame = countryGDF[
+    state_gdf: gpd.geodataframe.GeoDataFrame = countryGDF[  # type: ignore
         countryGDF["NAME_1"] == state_name
     ]
     state_gdf = state_gdf[["NAME_1", "geometry"]]
@@ -26,8 +27,8 @@ def extract_state_dataframe(
 
 
 def extract_district_dataframe(
-    countryGDF: gpd.geodataframe.GeoDataFrame, district_name: str
-) -> gpd.geodataframe.GeoDataFrame:
+    countryGDF: gpd.geodataframe.GeoDataFrame, district_name: str  # type: ignore
+) -> gpd.geodataframe.GeoDataFrame:  # type: ignore
     """Extracts the geodataframe for a given district from the gadm level 2 shapefile of a country
 
     Args:
@@ -37,14 +38,14 @@ def extract_district_dataframe(
     Returns:
         gpd.geodataframe.GeoDataFrame: GeoDataFrame of the state as extracted from countryGDF
     """
-    district_gdf: gpd.geodataframe.GeoDataFrame = countryGDF[
+    district_gdf: gpd.geodataframe.GeoDataFrame = countryGDF[  # type: ignore
         countryGDF["NAME_2"] == district_name
     ]
     district_gdf = district_gdf[["NAME_2", "geometry"]]
     return district_gdf
 
 
-def region_extents(region_gdf: gpd.geodataframe.GeoDataFrame) -> Extents:
+def region_extents(region_gdf: gpd.geodataframe.GeoDataFrame) -> Extents:  # type: ignore
     """Computes the extents the bounding box of a given geo dataframe.
 
     Args:
@@ -64,11 +65,7 @@ def region_extents(region_gdf: gpd.geodataframe.GeoDataFrame) -> Extents:
 
 
 def compute_center_from_extents(state_extents: Extents):
-    center = [
-        (state_extents[1] + state_extents[3]) / 2.0,
-        (state_extents[0] + state_extents[2]) / 2.0,
-    ]
-    return center
+    return [(state_extents[1] + state_extents[3]) / 2.0, (state_extents[0] + state_extents[2]) / 2.0, ]
 
 
 def get_region_bounding_box(region_extents: Extents) -> BoundingBox:
